@@ -13,7 +13,7 @@ import Modelo.Troca;
  *
  * @author Bruno
  */
-public class JanelaAvisoTroca extends javax.swing.JDialog {
+public class JanelaDadosTroca extends javax.swing.JDialog {
 
     Troca troca;
     
@@ -21,7 +21,7 @@ public class JanelaAvisoTroca extends javax.swing.JDialog {
      * Creates new form JanelaAvisoTroca
      * @param troca
      */
-    public JanelaAvisoTroca(Troca troca) {
+    public JanelaDadosTroca(Troca troca) {
         initComponents();
         Colecionador logado = Colecionador.getInstancia();
         this.setTitle("Nova Solicitação - " + logado.getIdColecionador());
@@ -48,6 +48,8 @@ public class JanelaAvisoTroca extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         txtTroca = new javax.swing.JTextField();
         labelStatus = new javax.swing.JLabel();
+        btnAceitarTroca = new javax.swing.JButton();
+        btnRejeitarTroca = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -61,6 +63,10 @@ public class JanelaAvisoTroca extends javax.swing.JDialog {
         labelStatus.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         labelStatus.setText("LABELSTATUS");
 
+        btnAceitarTroca.setText("Aceitar");
+
+        btnRejeitarTroca.setText("Rejeitar");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -69,15 +75,19 @@ public class JanelaAvisoTroca extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(txtTroca, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(labelStatus)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(labelStatus))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(txtTroca, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnAceitarTroca, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnRejeitarTroca, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -89,7 +99,11 @@ public class JanelaAvisoTroca extends javax.swing.JDialog {
                     .addComponent(labelStatus))
                 .addGap(18, 18, 18)
                 .addComponent(txtTroca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(68, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAceitarTroca)
+                    .addComponent(btnRejeitarTroca))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         pack();
@@ -97,6 +111,8 @@ public class JanelaAvisoTroca extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAceitarTroca;
+    private javax.swing.JButton btnRejeitarTroca;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel labelStatus;

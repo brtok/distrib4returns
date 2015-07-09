@@ -67,13 +67,23 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     }
 
     public static void atualizarTabelaTransacoes() {
-        Colecionador instancia = Colecionador.getInstancia();
-        ArrayList<Troca> transacoes = instancia.getTrocas();
+        Colecionador logado = Colecionador.getInstancia();
+        ArrayList<Troca> transacoes = logado.getTrocas();
         Object[][] tabela = new Object[transacoes.size()][4];
         for (int i = 0; i < transacoes.size(); i++) {
             tabela[i][0] = transacoes.get(i).getId();
-            tabela[i][1] = transacoes.get(i).getCartaoManda().getIdCartao() + "-" + transacoes.get(i).getCartaoManda().getLocal();
-            tabela[i][2] = transacoes.get(i).getCartaoRecebe().getIdCartao() + "-" + transacoes.get(i).getCartaoRecebe().getLocal();
+            
+            //Verificar se sou solicitante ou solicitado
+            if(transacoes.get(i).getSolicitado().getIdColecionador() == logado.getIdColecionador())
+            {
+                tabela[i][1] = transacoes.get(i).getCartaoRecebe().getIdCartao() + "-" + transacoes.get(i).getCartaoRecebe().getLocal();
+                tabela[i][2] = transacoes.get(i).getCartaoManda().getIdCartao() + "-" + transacoes.get(i).getCartaoManda().getLocal();
+            } else{
+                tabela[i][1] = transacoes.get(i).getCartaoManda().getIdCartao() + "-" + transacoes.get(i).getCartaoManda().getLocal();
+                tabela[i][2] = transacoes.get(i).getCartaoRecebe().getIdCartao() + "-" + transacoes.get(i).getCartaoRecebe().getLocal();
+            }
+            
+            
             switch (transacoes.get(i).getSituacaoTroca()) {
                 case 1:
                     tabela[i][3] = "Aguardando";
@@ -134,7 +144,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         tabelaColecionadores = new javax.swing.JTable();
         btnMeusCartoes = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnVisualizarTroca = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tabelaTransacoes = new javax.swing.JTable();
@@ -186,10 +196,10 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Colecionadores Ativos");
 
-        jButton1.setText("Visualizar Detalhes da Troca Selecionada");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnVisualizarTroca.setText("Visualizar Detalhes da Troca Selecionada");
+        btnVisualizarTroca.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnVisualizarTrocaActionPerformed(evt);
             }
         });
 
@@ -244,7 +254,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(btnMeusCartoes)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(btnVisualizarTroca, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -263,7 +273,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVisualizarCartoes)
                     .addComponent(btnMeusCartoes)
-                    .addComponent(jButton1))
+                    .addComponent(btnVisualizarTroca))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -310,27 +320,27 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnMeusCartoesActionPerformed
 
-	private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+	private void btnVisualizarTrocaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVisualizarTrocaActionPerformed
             try {
                 int selecao = tabelaTransacoes.getSelectedRow();
-                if (selecao < 0) {
-                    JOptionPane.showMessageDialog(null, "É preciso selecionar um transação na tabela.");
+                if (selecao < 1) {
+                    JOptionPane.showMessageDialog(null, "É preciso selecionar uma transação na tabela.");
                 } else {
                     DefaultTableModel dtm = (DefaultTableModel) tabelaTransacoes.getModel();
                     String idSelecionado = (String) dtm.getValueAt(selecao, 0);
                     Colecionador instancia = Colecionador.getInstancia();
-                    JanelaAvisoTroca av = new JanelaAvisoTroca(instancia.getTrocaPorId(idSelecionado));
+                    JanelaDadosTroca av = new JanelaDadosTroca(instancia.getTrocaPorId(idSelecionado));
                     av.setVisible(true);
                 }
             } catch (Exception ex) {
                 Logger.getLogger(JanelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
             }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnVisualizarTrocaActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnMeusCartoes;
     private javax.swing.JButton btnVisualizarCartoes;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnVisualizarTroca;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private static javax.swing.JScrollPane jScrollPane2;

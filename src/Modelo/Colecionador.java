@@ -17,6 +17,7 @@ public class Colecionador implements Serializable {
     private int idColecionador;
     private String nomeColecionador;
     private boolean coordenador;
+    private boolean efetuandoTransacao;
     private int porta;
     private ArrayList<Cartao> cartoes = new ArrayList<>();
     private ArrayList<ColecionadorEncontrado> listaParticipantes = new ArrayList<>();
@@ -86,6 +87,14 @@ public class Colecionador implements Serializable {
 
     public void setTrocas(ArrayList<Troca> trocas) {
         this.trocas = trocas;
+    }
+
+    public boolean isEfetuandoTransacao() {
+        return efetuandoTransacao;
+    }
+
+    public void setEfetuandoTransacao(boolean efetuandoTransacao) {
+        this.efetuandoTransacao = efetuandoTransacao;
     }
     
     public ColecionadorEncontrado getUsuarioParticipantePorId(int idColecionadorConectado) {
