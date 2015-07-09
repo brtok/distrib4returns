@@ -7,6 +7,7 @@ package GUI;
 
 import Modelo.Colecionador;
 import Modelo.ColecionadorEncontrado;
+import Modelo.Troca;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,11 +49,11 @@ public class JanelaPrincipal extends javax.swing.JFrame {
                         false, false, false
                     };
 
-            public Class getColumnClass(int columnIndex) {
+                    public Class getColumnClass(int columnIndex) {
                         return types[columnIndex];
                     }
 
-        public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    public boolean isCellEditable(int rowIndex, int columnIndex) {
                         return canEdit[columnIndex];
                     }
                 });
@@ -62,6 +63,60 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             tabelaColecionadores.getColumnModel().getColumn(0).setPreferredWidth(88);
             tabelaColecionadores.getColumnModel().getColumn(1).setPreferredWidth(101);
             tabelaColecionadores.getColumnModel().getColumn(2).setPreferredWidth(101);
+        }
+    }
+
+    public static void atualizarTabelaTransacoes() {
+        Colecionador instancia = Colecionador.getInstancia();
+        ArrayList<Troca> transacoes = instancia.getTrocas();
+        Object[][] tabela = new Object[transacoes.size()][4];
+        for (int i = 0; i < transacoes.size(); i++) {
+            tabela[i][0] = transacoes.get(i).getId();
+            tabela[i][1] = transacoes.get(i).getCartaoManda().getIdCartao() + "-" + transacoes.get(i).getCartaoManda().getLocal();
+            tabela[i][2] = transacoes.get(i).getCartaoRecebe().getIdCartao() + "-" + transacoes.get(i).getCartaoRecebe().getLocal();
+            switch (transacoes.get(i).getSituacaoTroca()) {
+                case 1:
+                    tabela[i][3] = "Aguardando";
+                    break;
+                case 2:
+                    tabela[i][3] = "Efetuada";
+                    break;
+                case 3:
+                    tabela[i][3] = "Recusada";
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(null, "Erro");
+                    System.exit(0);
+                    break;
+            }
+        }
+
+        tabelaTransacoes.setModel(new javax.swing.table.DefaultTableModel(
+                tabela,
+                new String[]{
+                    "ID", "Trocar Meu", "Trocar Por", "Status da Troca"
+                }
+        ) {
+            Class[] types = new Class[]{
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean[]{
+                false, false, false, false
+            };
+            public Class getColumnClass(int columnIndex) {
+                return types[columnIndex];
+            }
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(tabelaTransacoes);
+        if (tabelaTransacoes.getColumnModel().getColumnCount() > 0) {
+            tabelaTransacoes.getColumnModel().getColumn(0).setResizable(false);
+            tabelaTransacoes.getColumnModel().getColumn(0).setPreferredWidth(29);
+            tabelaTransacoes.getColumnModel().getColumn(1).setPreferredWidth(87);
+            tabelaTransacoes.getColumnModel().getColumn(2).setPreferredWidth(87);
+            tabelaTransacoes.getColumnModel().getColumn(3).setPreferredWidth(87);
         }
     }
 
@@ -78,7 +133,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tabelaColecionadores = new javax.swing.JTable();
         btnMeusCartoes = new javax.swing.JButton();
-		jLabel1 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -126,7 +181,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             }
         });
 
-		jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 204));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Colecionadores Ativos");
@@ -148,14 +203,14 @@ public class JanelaPrincipal extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Trocar Meu", "Trocar Por", "Status da Troca"
+                "ID", "Trocar Meu", "Trocar Por", "Status da Troca"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -167,8 +222,15 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             }
         });
         jScrollPane3.setViewportView(tabelaTransacoes);
+        if (tabelaTransacoes.getColumnModel().getColumnCount() > 0) {
+            tabelaTransacoes.getColumnModel().getColumn(0).setResizable(false);
+            tabelaTransacoes.getColumnModel().getColumn(0).setPreferredWidth(29);
+            tabelaTransacoes.getColumnModel().getColumn(1).setPreferredWidth(87);
+            tabelaTransacoes.getColumnModel().getColumn(2).setPreferredWidth(87);
+            tabelaTransacoes.getColumnModel().getColumn(3).setPreferredWidth(87);
+        }
 
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -176,7 +238,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-					.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(btnVisualizarCartoes)
                                 .addGap(18, 18, 18)
@@ -199,7 +261,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-					.addComponent(btnVisualizarCartoes)
+                    .addComponent(btnVisualizarCartoes)
                     .addComponent(btnMeusCartoes)
                     .addComponent(jButton1))
                 .addGap(18, 18, 18)
@@ -249,25 +311,26 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMeusCartoesActionPerformed
 
 	private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            int selecao = tabelaTransacoes.getSelectedRow();
-            if (selecao < 0) {
-                JOptionPane.showMessageDialog(null, "É preciso selecionar um transação na tabela.");
-            } else {
-                DefaultTableModel dtm = (DefaultTableModel) tabelaTransacoes.getModel();
-                int idSelecionado = (Integer) dtm.getValueAt(selecao, 0);
-                //JanelaAvisoTroca av = new JanelaAvisoTroca();
-                //av.setVisible(true);
+            try {
+                int selecao = tabelaTransacoes.getSelectedRow();
+                if (selecao < 0) {
+                    JOptionPane.showMessageDialog(null, "É preciso selecionar um transação na tabela.");
+                } else {
+                    DefaultTableModel dtm = (DefaultTableModel) tabelaTransacoes.getModel();
+                    String idSelecionado = (String) dtm.getValueAt(selecao, 0);
+                    Colecionador instancia = Colecionador.getInstancia();
+                    JanelaAvisoTroca av = new JanelaAvisoTroca(instancia.getTrocaPorId(idSelecionado));
+                    av.setVisible(true);
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(JanelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (Exception ex) {
-            Logger.getLogger(JanelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnMeusCartoes;
     private javax.swing.JButton btnVisualizarCartoes;
-	private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private static javax.swing.JScrollPane jScrollPane2;

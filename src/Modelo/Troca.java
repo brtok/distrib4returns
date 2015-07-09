@@ -13,10 +13,13 @@ import java.io.Serializable;
  */
 public class Troca implements Serializable{
     
-    private Colecionador solicitante;    
+    private String id;
+    private Colecionador solicitante;
     private Colecionador solicitado;
     private Cartao cartaoManda;
     private Cartao cartaoRecebe;
+    private int idCoordenador;
+    private boolean euPediTroca;
     
     
     //1: Aguardando, 2: Efetuada, 3: Recusada
@@ -61,6 +64,29 @@ public class Troca implements Serializable{
     public void setSituacaoTroca(int situacaoTroca) {
         this.situacaoTroca = situacaoTroca;
     }
-    
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public int getIdCoordenador() {
+        return idCoordenador;
+    }
+
+    public void setIdCoordenador(int idCoordenador) {
+        this.idCoordenador = idCoordenador;
+    }
+
+    public boolean isEuPediTroca() {
+        return euPediTroca;
+    }
+
+    public void setEuPediTroca(boolean euPediTroca) {
+        this.euPediTroca = euPediTroca;
+    }
     
 }

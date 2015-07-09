@@ -20,6 +20,7 @@ public class Colecionador implements Serializable {
     private int porta;
     private ArrayList<Cartao> cartoes = new ArrayList<>();
     private ArrayList<ColecionadorEncontrado> listaParticipantes = new ArrayList<>();
+    private ArrayList<Troca> trocas = new ArrayList<>();
     
     private static Colecionador instancia;
     
@@ -78,6 +79,14 @@ public class Colecionador implements Serializable {
     public void setPorta(int porta) {
         this.porta = porta;
     }
+
+    public ArrayList<Troca> getTrocas() {
+        return trocas;
+    }
+
+    public void setTrocas(ArrayList<Troca> trocas) {
+        this.trocas = trocas;
+    }
     
     public ColecionadorEncontrado getUsuarioParticipantePorId(int idColecionadorConectado) {
         ColecionadorEncontrado resultado = null;
@@ -89,4 +98,16 @@ public class Colecionador implements Serializable {
         }
         return resultado;
     }
+    
+    public Troca getTrocaPorId(String idTroca) {
+        Troca resultado = null;
+        for (Troca tr : trocas) {
+            if (tr.getId().equalsIgnoreCase(idTroca)) {
+                resultado = tr;
+                break;
+            }
+        }
+        return resultado;
+    }
+    
 }

@@ -27,11 +27,10 @@ public class JanelaSolicitacaoTroca extends javax.swing.JFrame {
 
     /**
      * Creates new form SolicitacaoTroca
+     * @param outroCartao
+     * @param idOutroColecionador
+     * @throws java.lang.Exception
      */
-    public JanelaSolicitacaoTroca() {
-        initComponents();
-    }
-
     public JanelaSolicitacaoTroca(Cartao outroCartao, int idOutroColecionador) throws Exception {
         initComponents();
         this.outroCartao = outroCartao;
@@ -81,11 +80,6 @@ public class JanelaSolicitacaoTroca extends javax.swing.JFrame {
         jLabel2.setText("Trocar o meu cartão");
 
         cbMeusCartoes.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "(Selecione)" }));
-        cbMeusCartoes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbMeusCartoesActionPerformed(evt);
-            }
-        });
 
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("pelo cartão");
@@ -137,10 +131,6 @@ public class JanelaSolicitacaoTroca extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cbMeusCartoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbMeusCartoesActionPerformed
-
-    }//GEN-LAST:event_cbMeusCartoesActionPerformed
-
     private void btnConfSolicitacaoTrocaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfSolicitacaoTrocaActionPerformed
 
         try {
@@ -161,7 +151,10 @@ public class JanelaSolicitacaoTroca extends javax.swing.JFrame {
                 IOColecionador iocol = new IOColecionador();
                 Colecionador solicitado = iocol.RecuperaColecionadorPorID(idOutroColecionador);
                 
+                String idTroca = String.valueOf(logado.getIdColecionador())
+                        + String.valueOf(1000 + (int) (Math.random()*8000));
                 Troca troca = new Troca();
+                troca.setId(idTroca);
                 troca.setCartaoManda(meuCartao);
                 troca.setCartaoRecebe(outroCartao);
                 troca.setSituacaoTroca(1);
@@ -171,11 +164,11 @@ public class JanelaSolicitacaoTroca extends javax.swing.JFrame {
                 ColecionadorEncontrado conexao = logado.getUsuarioParticipantePorId(idOutroColecionador);
                 RMIClient rmic = new RMIClient(conexao);
 		dispose();
+                logado.getTrocas().add(troca);
                 rmic.EnviaProposta(troca);
-
+                JanelaPrincipal.atualizarTabelaTransacoes();
             }
 
-            //cartoes = rmic.SolicitaListaCartoes(idUsuario);
         } catch (Exception e) {
             e.printStackTrace();
         }

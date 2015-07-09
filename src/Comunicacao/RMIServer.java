@@ -5,7 +5,7 @@
  */
 package Comunicacao;
 
-import GUI.JanelaAvisoTroca;
+import GUI.JanelaPrincipal;
 import IOarquivo.IOCartao;
 import Interface.ComunicacaoServer;
 import Modelo.Cartao;
@@ -31,10 +31,9 @@ public class RMIServer extends UnicastRemoteObject implements ComunicacaoServer 
 
     @Override
     public void ReceberProposta(Troca troca) throws InterruptedException {
-        
-        JanelaAvisoTroca jat = new JanelaAvisoTroca(troca);
-        jat.setVisible(true);
-        
+        Colecionador instancia = Colecionador.getInstancia();
+        instancia.getTrocas().add(troca);
+        JanelaPrincipal.atualizarTabelaTransacoes();
     }
     
     @Override
