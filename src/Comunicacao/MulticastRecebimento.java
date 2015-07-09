@@ -24,6 +24,8 @@ public class MulticastRecebimento extends Thread {
     @Override
     public void run() {
         try {
+            Colecionador logado = Colecionador.getInstancia();
+
             InetAddress address = InetAddress.getByName("228.5.6.7");
             MulticastSocket clientSocket = new MulticastSocket(8885);
             clientSocket.joinGroup(address);
@@ -49,6 +51,17 @@ public class MulticastRecebimento extends Thread {
                     long tempo = System.currentTimeMillis() + 20000;
                     ColecionadorEncontrado ce = new ColecionadorEncontrado(idColecionador, portaColecionador, tempo, nome, numeroCartoes);
                     participantes.add(ce);
+
+                    if (participantes.size() > 1) {
+                        //O participante de menor id é o coordenador
+                        if (idColecionador <= logado.getIdColecionador()) {
+                            logado.setCoordenador(true);
+                            System.out.println("SOU COORDENADOR");
+                        } else {
+                            logado.setCoordenador(false);
+                        }
+                    }
+
                 } else {
                     long tempo = System.currentTimeMillis() + 20000;
                     participantes.get(indice).setConsiderarQueda(tempo);
