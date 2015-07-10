@@ -148,8 +148,7 @@ public class JanelaSolicitacaoTroca extends javax.swing.JFrame {
                 IOCartao iocar = new IOCartao();
                 meuCartao = iocar.RecuperarCartaoPorID(idCartaoSelecionado);
 
-                IOColecionador iocol = new IOColecionador();
-                Colecionador solicitado = iocol.RecuperaColecionadorPorID(idOutroColecionador);
+                ColecionadorEncontrado solicitado = logado.getUsuarioParticipantePorId(idOutroColecionador);
                 
                 String idTroca = String.valueOf(logado.getIdColecionador())
                         + String.valueOf(1000 + (int) (Math.random()*8000));
@@ -158,14 +157,28 @@ public class JanelaSolicitacaoTroca extends javax.swing.JFrame {
                 troca.setCartaoManda(meuCartao);
                 troca.setCartaoRecebe(outroCartao);
                 troca.setSituacaoTroca(1);
-                troca.setSolicitante(logado);
-                troca.setSolicitado(solicitado);
+                troca.setIdSolicitante(logado.getIdColecionador());
+                troca.setIdSolicitado(solicitado.getIdColecionador());
+                int coordenador = -1;
+                for (int i=0; i<logado.getListaParticipantes().size(); i++) {
+                    if (logado.getListaParticipantes().get(i).getIdColecionador() != troca.getIdSolicitado() &&
+                            logado.getListaParticipantes().get(i).getIdColecionador() != troca.getIdSolicitante()) {
+                        coordenador = logado.getListaParticipantes().get(i).getIdColecionador();
+                        break;
+                    }
+                }
+                if (coordenador < 0) {
+                    JOptionPane.showMessageDialog(null, "erro!");
+                    dispose();
+                } else {
+                    troca.setIdCoordenador(coordenador);
+                }
                 
                 ColecionadorEncontrado conexao = logado.getUsuarioParticipantePorId(idOutroColecionador);
                 RMIClient rmic = new RMIClient(conexao);
 		dispose();
                 logado.getTrocas().add(troca);
-                rmic.EnviaProposta(troca);
+                rmic.EnviaPropostaParaCoordenador(troca);
                 JanelaPrincipal.atualizarTabelaTransacoes();
             }
 

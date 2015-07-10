@@ -37,6 +37,9 @@ public class JanelaCartoes extends javax.swing.JDialog {
         } else {
             btnNovoCartao.setVisible(false);
         }
+        if (logado.getListaParticipantes().size() < 3) {
+            btnPedirTroca.setVisible(false);
+        }
         setModal(true);
         CarregaCartoes();
     }
@@ -51,21 +54,29 @@ public class JanelaCartoes extends javax.swing.JDialog {
         if (idUsuario == logado.getIdColecionador()) {
             IOCartao iocar = new IOCartao();
             cartoes = iocar.RecuperarCartoes();
+            if (cartoes != null) {
+                Object[][] tabela = new Object[cartoes.size()][3];
+                for (int i = 0; i < cartoes.size(); i++) {
+                    tabela[i][0] = cartoes.get(i).getIdCartao();
+                    tabela[i][1] = cartoes.get(i).getLocal();
+                    tabela[i][2] = logado.getNomeColecionador();
+                }
+                PopulaTabela(tabela);
+            }
         } else {
             ColecionadorEncontrado conexao = logado.getUsuarioParticipantePorId(idUsuario);
             RMIClient rmic = new RMIClient(conexao);
             cartoes = rmic.SolicitaListaCartoes(idUsuario);
-        }
-
-        if (cartoes != null) {
-            Object[][] tabela = new Object[cartoes.size()][3];
-            for (int i = 0; i < cartoes.size(); i++) {
-                tabela[i][0] = cartoes.get(i).getIdCartao();
-                tabela[i][1] = cartoes.get(i).getLocal();
-                ColecionadorEncontrado ce = logado.getUsuarioParticipantePorId(cartoes.get(i).getIdProprietario());
-                tabela[i][2] = ce.getNome();
+            if (cartoes != null) {
+                Object[][] tabela = new Object[cartoes.size()][3];
+                for (int i = 0; i < cartoes.size(); i++) {
+                    tabela[i][0] = cartoes.get(i).getIdCartao();
+                    tabela[i][1] = cartoes.get(i).getLocal();
+                    ColecionadorEncontrado ce = logado.getUsuarioParticipantePorId(cartoes.get(i).getIdProprietario());
+                    tabela[i][2] = ce.getNome();
+                }
+                PopulaTabela(tabela);
             }
-            PopulaTabela(tabela);
         }
 
     }
@@ -194,15 +205,15 @@ public class JanelaCartoes extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(null, "É preciso selecionar um cartão.");
             } else {
                 DefaultTableModel dtm = (DefaultTableModel) tbCartoes.getModel();
-                
+
                 int idSelecionado = (Integer) dtm.getValueAt(selecao, 0);
                 String localSelecionado = (String) dtm.getValueAt(selecao, 1);
-                
+
                 //IOCartao iocar = new IOCartao();
-                Cartao cartaoSelecionado  = new Cartao();
+                Cartao cartaoSelecionado = new Cartao();
                 cartaoSelecionado.setIdCartao(idSelecionado);
                 cartaoSelecionado.setLocal(localSelecionado);
-                
+
                 this.dispose();
                 JanelaSolicitacaoTroca jst = new JanelaSolicitacaoTroca(cartaoSelecionado, idUsuario);
                 jst.setVisible(true);

@@ -72,18 +72,16 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         Object[][] tabela = new Object[transacoes.size()][4];
         for (int i = 0; i < transacoes.size(); i++) {
             tabela[i][0] = transacoes.get(i).getId();
-            
+
             //Verificar se sou solicitante ou solicitado
-            if(transacoes.get(i).getSolicitado().getIdColecionador() == logado.getIdColecionador())
-            {
+            if (transacoes.get(i).getIdSolicitado() == logado.getIdColecionador()) {
                 tabela[i][1] = transacoes.get(i).getCartaoRecebe().getIdCartao() + "-" + transacoes.get(i).getCartaoRecebe().getLocal();
                 tabela[i][2] = transacoes.get(i).getCartaoManda().getIdCartao() + "-" + transacoes.get(i).getCartaoManda().getLocal();
-            } else{
+            } else {
                 tabela[i][1] = transacoes.get(i).getCartaoManda().getIdCartao() + "-" + transacoes.get(i).getCartaoManda().getLocal();
                 tabela[i][2] = transacoes.get(i).getCartaoRecebe().getIdCartao() + "-" + transacoes.get(i).getCartaoRecebe().getLocal();
             }
-            
-            
+
             switch (transacoes.get(i).getSituacaoTroca()) {
                 case 1:
                     tabela[i][3] = "Aguardando";
@@ -113,9 +111,11 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             boolean[] canEdit = new boolean[]{
                 false, false, false, false
             };
+
             public Class getColumnClass(int columnIndex) {
                 return types[columnIndex];
             }
+
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit[columnIndex];
             }
@@ -323,13 +323,12 @@ public class JanelaPrincipal extends javax.swing.JFrame {
 	private void btnVisualizarTrocaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVisualizarTrocaActionPerformed
             try {
                 int selecao = tabelaTransacoes.getSelectedRow();
-                if (selecao < 1) {
+                if (selecao < 0) {
                     JOptionPane.showMessageDialog(null, "É preciso selecionar uma transação na tabela.");
                 } else {
                     DefaultTableModel dtm = (DefaultTableModel) tabelaTransacoes.getModel();
                     String idSelecionado = (String) dtm.getValueAt(selecao, 0);
-                    Colecionador instancia = Colecionador.getInstancia();
-                    JanelaDadosTroca av = new JanelaDadosTroca(instancia.getTrocaPorId(idSelecionado));
+                    JanelaDadosTroca av = new JanelaDadosTroca(idSelecionado);
                     av.setVisible(true);
                 }
             } catch (Exception ex) {

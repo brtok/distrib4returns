@@ -16,7 +16,9 @@ import java.util.ArrayList;
  */
 public interface ComunicacaoServer extends Remote {
         
-    void ReceberProposta(Troca troca) throws Exception;
+    void ReceberPropostaComoCoordenador(Troca troca) throws Exception;
+    
+    void ReceberPropostaComoParticipante(Troca troca) throws Exception;
     
     ArrayList<Cartao> ListarCartoes() throws Exception;
     

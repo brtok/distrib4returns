@@ -14,8 +14,6 @@ import java.rmi.Remote;
  */
 public interface ComunicacaoClient extends Remote {
    
-    void EnviaProposta(Troca troca) throws Exception;
-    
-    Troca RespondeProposta(Troca troca, ComunicacaoClient cliente) throws Exception;
+    void EnviaPropostaParaCoordenador(Troca troca) throws Exception;
     
 }

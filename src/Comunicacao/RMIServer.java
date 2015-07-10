@@ -5,6 +5,7 @@
  */
 package Comunicacao;
 
+import Controle.Coordenador;
 import GUI.JanelaPrincipal;
 import Controle.IOCartao;
 import Interface.ComunicacaoServer;
@@ -30,7 +31,13 @@ public class RMIServer extends UnicastRemoteObject implements ComunicacaoServer 
     }
 
     @Override
-    public void ReceberProposta(Troca troca) throws InterruptedException {
+    public void ReceberPropostaComoCoordenador(Troca troca) throws InterruptedException {
+        Coordenador coordenar = Coordenador.getInstancia();
+        coordenar.getTrocasQueSouCoordenador().add(troca);
+    }
+    
+    @Override
+    public void ReceberPropostaComoParticipante(Troca troca) throws InterruptedException {
         Colecionador instancia = Colecionador.getInstancia();
         instancia.getTrocas().add(troca);
         JanelaPrincipal.atualizarTabelaTransacoes();

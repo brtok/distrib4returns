@@ -7,6 +7,7 @@ package GUI;
 
 import Modelo.Cartao;
 import Modelo.Colecionador;
+import Modelo.ColecionadorEncontrado;
 import Modelo.Troca;
 
 /**
@@ -21,17 +22,18 @@ public class JanelaDadosTroca extends javax.swing.JDialog {
      * Creates new form JanelaAvisoTroca
      * @param troca
      */
-    public JanelaDadosTroca(Troca troca) {
+    public JanelaDadosTroca(String idTroca) {
         initComponents();
         Colecionador logado = Colecionador.getInstancia();
+        troca = logado.getTrocaPorId(idTroca);
         this.setTitle("Nova Solicitação - " + logado.getIdColecionador());
         this.troca = troca;
         Cartao cartaoRecebe = troca.getCartaoManda();
         Cartao cartaoManda = troca.getCartaoRecebe();
-        Colecionador outroColecionador = troca.getSolicitante();
+        ColecionadorEncontrado outroColecionador = logado.getUsuarioParticipantePorId(troca.getIdSolicitante());
         String textoTroca = "Trocar " + cartaoRecebe.getIdCartao() + " - " + cartaoRecebe.getLocal() + 
                 " por " + cartaoManda.getIdCartao() + " - " + cartaoManda.getLocal() + " com " +
-        outroColecionador.getIdColecionador() + " - " + outroColecionador.getNomeColecionador();
+        outroColecionador.getIdColecionador() + " - " + outroColecionador.getNome();
         txtTroca.setText(textoTroca);
     }
 

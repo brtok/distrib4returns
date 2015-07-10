@@ -14,30 +14,30 @@ import java.io.Serializable;
 public class Troca implements Serializable{
     
     private String id;
-    private Colecionador solicitante;
-    private Colecionador solicitado;
+    private int idSolicitante;
+    private int idSolicitado;
+    private int idCoordenador;
     private Cartao cartaoManda;
     private Cartao cartaoRecebe;
-    private int idCoordenador;
-    
     
     //1: Aguardando, 2: Efetuada, 3: Recusada
     private int situacaoTroca;
 
-    public Colecionador getSolicitante() {
-        return solicitante;
+    
+    public int getIdSolicitante() {
+        return idSolicitante;
     }
 
-    public void setSolicitante(Colecionador solicitante) {
-        this.solicitante = solicitante;
+    public void setIdSolicitante(int idSolicitante) {
+        this.idSolicitante = idSolicitante;
     }
 
-    public Colecionador getSolicitado() {
-        return solicitado;
+    public int getIdSolicitado() {
+        return idSolicitado;
     }
 
-    public void setSolicitado(Colecionador solicitado) {
-        this.solicitado = solicitado;
+    public void setIdSolicitado(int idSolicitado) {
+        this.idSolicitado = idSolicitado;
     }
 
     public Cartao getCartaoManda() {

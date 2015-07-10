@@ -32,18 +32,13 @@ public class RMIClient extends UnicastRemoteObject implements ComunicacaoClient 
         obj = (ComunicacaoServer) reg.lookup(nomeServer);
     }
 
-    @Override
-    public Troca RespondeProposta(Troca troca, ComunicacaoClient cliente) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     public ArrayList<Cartao> SolicitaListaCartoes(int idColecionador) throws Exception {
         ArrayList<Cartao> cartoes = obj.ListarCartoes();
         return cartoes;
     }
 
     @Override
-    public void EnviaProposta(Troca troca) throws Exception {
-        obj.ReceberProposta(troca);
+    public void EnviaPropostaParaCoordenador(Troca troca) throws Exception {
+        obj.ReceberPropostaComoCoordenador(troca);
     }
 }
