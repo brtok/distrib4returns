@@ -9,6 +9,7 @@ import Modelo.Cartao;
 import Modelo.Colecionador;
 import Modelo.ColecionadorEncontrado;
 import Modelo.Troca;
+import static java.lang.Thread.sleep;
 
 /**
  *
@@ -17,24 +18,59 @@ import Modelo.Troca;
 public class JanelaDadosTroca extends javax.swing.JDialog {
 
     Troca troca;
-    
+
     /**
      * Creates new form JanelaAvisoTroca
-     * @param troca
+     *
+     * @param idTroca
+     * @throws java.lang.InterruptedException
      */
-    public JanelaDadosTroca(String idTroca) {
+    public JanelaDadosTroca(String idTroca) throws InterruptedException {
         initComponents();
+        setModal(true);
         Colecionador logado = Colecionador.getInstancia();
         troca = logado.getTrocaPorId(idTroca);
         this.setTitle("Nova Solicitação - " + logado.getIdColecionador());
-        this.troca = troca;
         Cartao cartaoRecebe = troca.getCartaoManda();
         Cartao cartaoManda = troca.getCartaoRecebe();
         ColecionadorEncontrado outroColecionador = logado.getUsuarioParticipantePorId(troca.getIdSolicitante());
-        String textoTroca = "Trocar " + cartaoRecebe.getIdCartao() + " - " + cartaoRecebe.getLocal() + 
-                " por " + cartaoManda.getIdCartao() + " - " + cartaoManda.getLocal() + " com " +
-        outroColecionador.getIdColecionador() + " - " + outroColecionador.getNome();
+        String textoTroca = "Trocar " + cartaoRecebe.getIdCartao() + " - " + cartaoRecebe.getLocal()
+                + " por " + cartaoManda.getIdCartao() + " - " + cartaoManda.getLocal() + " com "
+                + outroColecionador.getIdColecionador() + " - " + outroColecionador.getNome();
         txtTroca.setText(textoTroca);
+        
+        switch (troca.getSituacaoTroca()) {
+            case 1:
+                labelStatus.setForeground(new java.awt.Color(0, 102, 204));
+                labelStatus.setText("Aguardando");
+                break;
+            case 2:
+                labelStatus.setForeground(new java.awt.Color(0, 102, 204));
+                labelStatus.setText("Aguardando");
+                break;
+            case 3:
+                labelStatus.setForeground(new java.awt.Color(0, 102, 204));
+                labelStatus.setText("Aguardando");
+                break;
+            case 4:
+                labelStatus.setForeground(new java.awt.Color(0, 153, 51));
+                labelStatus.setText("Aguardando");
+                break;
+            case 5:
+                labelStatus.setForeground(new java.awt.Color(0, 153, 51));
+                labelStatus.setText("Efetuada");
+                break;
+            case 6:
+                labelStatus.setForeground(new java.awt.Color(204, 0, 0));
+                labelStatus.setText("Cancelada/Recusada");
+                break;
+            default:
+                labelStatus.setText("ERRO");
+                sleep(3000);
+                dispose();
+                break;
+        }
+        
     }
 
     /**

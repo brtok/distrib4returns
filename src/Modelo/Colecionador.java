@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * @author Rafael
  */
 public class Colecionador implements Serializable {
-    
+
     private int idColecionador;
     private String nomeColecionador;
     private boolean coordenador;
@@ -21,10 +21,12 @@ public class Colecionador implements Serializable {
     private int porta;
     private ArrayList<Cartao> cartoes = new ArrayList<>();
     private ArrayList<ColecionadorEncontrado> listaParticipantes = new ArrayList<>();
-    private ArrayList<Troca> trocas = new ArrayList<>();
-    
+    private ArrayList<Troca> trocasQueSolicitei = new ArrayList<>();
+    private ArrayList<Troca> trocasSolicitadas = new ArrayList<>();
+    private ArrayList<Troca> trocasQueSouCoordenador = new ArrayList<>();
+
     private static Colecionador instancia;
-    
+
     public static Colecionador getInstancia() {
         return instancia;
     }
@@ -81,12 +83,28 @@ public class Colecionador implements Serializable {
         this.porta = porta;
     }
 
-    public ArrayList<Troca> getTrocas() {
-        return trocas;
+    public ArrayList<Troca> getTrocasQueSolicitei() {
+        return trocasQueSolicitei;
     }
 
-    public void setTrocas(ArrayList<Troca> trocas) {
-        this.trocas = trocas;
+    public void setTrocasQueSolicitei(ArrayList<Troca> trocasQueSolicitei) {
+        this.trocasQueSolicitei = trocasQueSolicitei;
+    }
+
+    public ArrayList<Troca> getTrocasSolicitadas() {
+        return trocasSolicitadas;
+    }
+
+    public void setTrocasSolicitadas(ArrayList<Troca> trocasSolicitadas) {
+        this.trocasSolicitadas = trocasSolicitadas;
+    }
+
+    public ArrayList<Troca> getTrocasQueSouCoordenador() {
+        return trocasQueSouCoordenador;
+    }
+
+    public void setTrocasQueSouCoordenador(ArrayList<Troca> trocasQueSouCoordenador) {
+        this.trocasQueSouCoordenador = trocasQueSouCoordenador;
     }
 
     public boolean isEfetuandoTransacao() {
@@ -96,7 +114,7 @@ public class Colecionador implements Serializable {
     public void setEfetuandoTransacao(boolean efetuandoTransacao) {
         this.efetuandoTransacao = efetuandoTransacao;
     }
-    
+
     public ColecionadorEncontrado getUsuarioParticipantePorId(int idColecionadorConectado) {
         ColecionadorEncontrado resultado = null;
         for (ColecionadorEncontrado ce : listaParticipantes) {
@@ -107,8 +125,38 @@ public class Colecionador implements Serializable {
         }
         return resultado;
     }
-    
+
+    public Troca getTrocaQueSoliciteiPorId(String idTroca) {
+        Troca resultado = null;
+        for (Troca tr : trocasQueSolicitei) {
+            if (tr.getId().equalsIgnoreCase(idTroca)) {
+                resultado = tr;
+                break;
+            }
+        }
+        return resultado;
+    }
+
+    public Troca getTrocaSolicitadaPorId(String idTroca) {
+        Troca resultado = null;
+        for (Troca tr : trocasSolicitadas) {
+            if (tr.getId().equalsIgnoreCase(idTroca)) {
+                resultado = tr;
+                break;
+            }
+        }
+        return resultado;
+    }
+
+    public ArrayList<Troca> getTodasAsTrocas() {
+        ArrayList<Troca> resultado = new ArrayList<>();
+        resultado.addAll(trocasQueSolicitei);
+        resultado.addAll(trocasSolicitadas);
+        return resultado;
+    }
+
     public Troca getTrocaPorId(String idTroca) {
+        ArrayList<Troca> trocas = this.getTodasAsTrocas();
         Troca resultado = null;
         for (Troca tr : trocas) {
             if (tr.getId().equalsIgnoreCase(idTroca)) {

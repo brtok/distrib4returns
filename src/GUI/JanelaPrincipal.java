@@ -68,7 +68,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
 
     public static void atualizarTabelaTransacoes() {
         Colecionador logado = Colecionador.getInstancia();
-        ArrayList<Troca> transacoes = logado.getTrocas();
+        ArrayList<Troca> transacoes = logado.getTodasAsTrocas();
         Object[][] tabela = new Object[transacoes.size()][4];
         for (int i = 0; i < transacoes.size(); i++) {
             tabela[i][0] = transacoes.get(i).getId();
@@ -87,9 +87,18 @@ public class JanelaPrincipal extends javax.swing.JFrame {
                     tabela[i][3] = "Aguardando";
                     break;
                 case 2:
-                    tabela[i][3] = "Efetuada";
+                    tabela[i][3] = "Aguardando";
                     break;
                 case 3:
+                    tabela[i][3] = "Aguardando";
+                    break;
+                case 4:
+                    tabela[i][3] = "Aguardando";
+                    break;
+                case 5:
+                    tabela[i][3] = "Efetuada";
+                    break;
+                case 6:
                     tabela[i][3] = "Recusada";
                     break;
                 default:

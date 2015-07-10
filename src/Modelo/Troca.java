@@ -20,9 +20,18 @@ public class Troca implements Serializable{
     private Cartao cartaoManda;
     private Cartao cartaoRecebe;
     
-    //1: Aguardando, 2: Efetuada, 3: Recusada
+    //1: Enviada para o Coordenador
+    //2: Aguardando Respostas
+    //3: Aguardando Finalização
+    //4: Fazer a Troca
+    //5: Efetuada
+    //6: Recusada
     private int situacaoTroca;
 
+    //Decisões
+    private boolean solicitanteAceita;
+    private boolean solicitadoAceita;
+    
     
     public int getIdSolicitante() {
         return idSolicitante;
@@ -78,6 +87,22 @@ public class Troca implements Serializable{
 
     public void setIdCoordenador(int idCoordenador) {
         this.idCoordenador = idCoordenador;
+    }
+
+    public boolean isSolicitanteAceita() {
+        return solicitanteAceita;
+    }
+
+    public void setSolicitanteAceita(boolean solicitanteAceita) {
+        this.solicitanteAceita = solicitanteAceita;
+    }
+
+    public boolean isSolicitadoAceita() {
+        return solicitadoAceita;
+    }
+
+    public void setSolicitadoAceita(boolean solicitadoAceita) {
+        this.solicitadoAceita = solicitadoAceita;
     }
     
 }

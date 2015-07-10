@@ -7,7 +7,6 @@ package GUI;
 
 import Comunicacao.RMIClient;
 import Controle.IOCartao;
-import Controle.IOColecionador;
 import Modelo.Cartao;
 import Modelo.Colecionador;
 import Modelo.ColecionadorEncontrado;
@@ -177,7 +176,7 @@ public class JanelaSolicitacaoTroca extends javax.swing.JFrame {
                 ColecionadorEncontrado conexao = logado.getUsuarioParticipantePorId(idOutroColecionador);
                 RMIClient rmic = new RMIClient(conexao);
 		dispose();
-                logado.getTrocas().add(troca);
+                logado.getTrocasQueSolicitei().add(troca);
                 rmic.EnviaPropostaParaCoordenador(troca);
                 JanelaPrincipal.atualizarTabelaTransacoes();
             }
