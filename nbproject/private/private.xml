@@ -6,8 +6,14 @@
             <file>file:/D:/GitHub/distrib4returns/src/Comunicacao/RMIClient.java</file>
             <file>file:/D:/GitHub/distrib4returns/src/Modelo/Colecionador.java</file>
             <file>file:/D:/GitHub/distrib4returns/src/GUI/JanelaSolicitacaoTroca.java</file>
+            <file>file:/D:/GitHub/distrib4returns/src/Interface/ComunicacaoServer.java</file>
+            <file>file:/D:/GitHub/distrib4returns/src/GUI/JanelaDadosTroca.java</file>
             <file>file:/D:/GitHub/distrib4returns/src/Controle/Coordenador.java</file>
+            <file>file:/D:/GitHub/distrib4returns/src/Interface/ComunicacaoClient.java</file>
             <file>file:/D:/GitHub/distrib4returns/src/Comunicacao/RMIServer.java</file>
+            <file>file:/D:/GitHub/distrib4returns/src/GUI/JanelaPrincipal.java</file>
+            <file>file:/D:/GitHub/distrib4returns/src/GUI/JanelaCartoes.java</file>
+            <file>file:/D:/GitHub/distrib4returns/src/Modelo/Troca.java</file>
         </group>
     </open-files>
 </project-private>
