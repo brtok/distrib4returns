@@ -16,4 +16,7 @@ public interface ComunicacaoClient extends Remote {
    
     void EnviaPropostaParaCoordenador(Troca troca) throws Exception;
     
+    void EnviarAtualizacaoTroca(Troca troca) throws Exception;
+    
+    void ResponderTroca(String idTroca, int idParticipante, boolean aceito) throws Exception;
 }

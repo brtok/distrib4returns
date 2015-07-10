@@ -6,6 +6,7 @@
 package Controle;
 
 import Modelo.Colecionador;
+import Modelo.Troca;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,8 +26,24 @@ public class ThreadCoordenacao extends Thread {
         try {
             logado = Colecionador.getInstancia();
             while (true) {
-                
-                sleep(3000);
+                for (Troca t : logado.getTrocasQueSouCoordenador()) {
+                    switch (t.getSituacaoTroca()) {
+                        case 1:
+                            
+                            break;
+                        case 2:
+                            
+                            break;
+                        case 3:
+                            
+                            break;
+                        case 4:
+                            
+                            break;
+                    }
+                    sleep(1000);
+                }
+                sleep(5000);
             }
         } catch (InterruptedException ex) {
             Logger.getLogger(ThreadCoordenacao.class.getName()).log(Level.SEVERE, null, ex);

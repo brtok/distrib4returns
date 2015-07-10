@@ -22,4 +22,8 @@ public interface ComunicacaoServer extends Remote {
     
     ArrayList<Cartao> ListarCartoes() throws Exception;
     
+    void AtualizarTroca(Troca troca) throws Exception;
+    
+    void ReceberRespostaTroca(String idTroca, int idParticipante, boolean aceito) throws Exception;
+    
 }

@@ -41,4 +41,15 @@ public class RMIClient extends UnicastRemoteObject implements ComunicacaoClient 
     public void EnviaPropostaParaCoordenador(Troca troca) throws Exception {
         obj.ReceberPropostaComoCoordenador(troca);
     }
+    
+    @Override
+    public void EnviarAtualizacaoTroca(Troca troca) throws Exception {
+        obj.AtualizarTroca(troca);
+    }
+    
+    @Override
+    public void ResponderTroca(String idTroca, int idParticipante, boolean aceito) throws Exception {
+        obj.ReceberRespostaTroca(idTroca, idParticipante, aceito);
+    }
+    
 }

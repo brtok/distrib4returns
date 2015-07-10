@@ -26,6 +26,7 @@ public class JanelaSolicitacaoTroca extends javax.swing.JFrame {
 
     /**
      * Creates new form SolicitacaoTroca
+     *
      * @param outroCartao
      * @param idOutroColecionador
      * @throws java.lang.Exception
@@ -34,17 +35,13 @@ public class JanelaSolicitacaoTroca extends javax.swing.JFrame {
         initComponents();
         this.outroCartao = outroCartao;
         this.idOutroColecionador = idOutroColecionador;
-
         lblCartaoProposto.setText(outroCartao.getIdCartao() + " - " + outroCartao.getLocal());
-
         PopulaComboBox();
-
     }
 
     public void PopulaComboBox() throws Exception {
         IOCartao iocar = new IOCartao();
         ArrayList<Cartao> cartoes = iocar.RecuperarCartoes();
-
         for (Cartao c : cartoes) {
             String item = c.getIdCartao() + " - " + c.getLocal();
             cbMeusCartoes.addItem(item);
@@ -131,37 +128,22 @@ public class JanelaSolicitacaoTroca extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfSolicitacaoTrocaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfSolicitacaoTrocaActionPerformed
-
         try {
-            
             Colecionador logado = Colecionador.getInstancia();
-
             if (cbMeusCartoes.getSelectedItem().equals("(Selecione)")) {
                 JOptionPane.showMessageDialog(null, "Selecione um cartão.");
             } else {
                 String itemSelecionado = (String) cbMeusCartoes.getSelectedItem();
                 String txtItemSelecionado[] = itemSelecionado.split(" ");
-
                 int idCartaoSelecionado = Integer.parseInt(txtItemSelecionado[0]);
-                
                 IOCartao iocar = new IOCartao();
                 meuCartao = iocar.RecuperarCartaoPorID(idCartaoSelecionado);
-
-                ColecionadorEncontrado solicitado = logado.getUsuarioParticipantePorId(idOutroColecionador);
-                
                 String idTroca = String.valueOf(logado.getIdColecionador())
-                        + String.valueOf(1000 + (int) (Math.random()*8000));
-                Troca troca = new Troca();
-                troca.setId(idTroca);
-                troca.setCartaoManda(meuCartao);
-                troca.setCartaoRecebe(outroCartao);
-                troca.setSituacaoTroca(1);
-                troca.setIdSolicitante(logado.getIdColecionador());
-                troca.setIdSolicitado(solicitado.getIdColecionador());
+                        + String.valueOf(1000 + (int) (Math.random() * 8000));
                 int coordenador = -1;
-                for (int i=0; i<logado.getListaParticipantes().size(); i++) {
-                    if (logado.getListaParticipantes().get(i).getIdColecionador() != troca.getIdSolicitado() &&
-                            logado.getListaParticipantes().get(i).getIdColecionador() != troca.getIdSolicitante()) {
+                for (int i = 0; i < logado.getListaParticipantes().size(); i++) {
+                    if (logado.getListaParticipantes().get(i).getIdColecionador() != idOutroColecionador
+                            && logado.getListaParticipantes().get(i).getIdColecionador() != logado.getIdColecionador()) {
                         coordenador = logado.getListaParticipantes().get(i).getIdColecionador();
                         break;
                     }
@@ -170,22 +152,18 @@ public class JanelaSolicitacaoTroca extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "erro!");
                     dispose();
                 } else {
-                    troca.setIdCoordenador(coordenador);
+                    Troca troca = new Troca(idTroca, logado.getIdColecionador(), idOutroColecionador, coordenador, meuCartao, outroCartao);
+                    ColecionadorEncontrado conexao = logado.getUsuarioParticipantePorId(idOutroColecionador);
+                    RMIClient rmic = new RMIClient(conexao);
+                    logado.getTrocasQueSouParticipante().add(troca);
+                    rmic.EnviaPropostaParaCoordenador(troca);
+                    JanelaPrincipal.atualizarTabelaTransacoes();
+                    dispose();
                 }
-                
-                ColecionadorEncontrado conexao = logado.getUsuarioParticipantePorId(idOutroColecionador);
-                RMIClient rmic = new RMIClient(conexao);
-		dispose();
-                logado.getTrocasQueSolicitei().add(troca);
-                rmic.EnviaPropostaParaCoordenador(troca);
-                JanelaPrincipal.atualizarTabelaTransacoes();
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }//GEN-LAST:event_btnConfSolicitacaoTrocaActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

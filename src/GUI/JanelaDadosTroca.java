@@ -29,7 +29,7 @@ public class JanelaDadosTroca extends javax.swing.JDialog {
         initComponents();
         setModal(true);
         Colecionador logado = Colecionador.getInstancia();
-        troca = logado.getTrocaPorId(idTroca);
+        troca = logado.getTrocaQueSouParticipantePorId(idTroca);
         this.setTitle("Nova Solicitação - " + logado.getIdColecionador());
         Cartao cartaoRecebe = troca.getCartaoManda();
         Cartao cartaoManda = troca.getCartaoRecebe();

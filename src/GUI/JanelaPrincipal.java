@@ -68,7 +68,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
 
     public static void atualizarTabelaTransacoes() {
         Colecionador logado = Colecionador.getInstancia();
-        ArrayList<Troca> transacoes = logado.getTodasAsTrocas();
+        ArrayList<Troca> transacoes = logado.getTrocasQueSouParticipante();
         Object[][] tabela = new Object[transacoes.size()][4];
         for (int i = 0; i < transacoes.size(); i++) {
             tabela[i][0] = transacoes.get(i).getId();

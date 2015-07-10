@@ -25,32 +25,9 @@ import java.util.logging.Logger;
  */
 public class RMIServer extends UnicastRemoteObject implements ComunicacaoServer {
     
+    
     public RMIServer() throws RemoteException {
         super();
-    }
-
-    @Override
-    public void ReceberPropostaComoCoordenador(Troca troca) throws InterruptedException {
-        Colecionador logado = Colecionador.getInstancia();
-        logado.getTrocasQueSouCoordenador().add(troca);
-    }
-    
-    @Override
-    public void ReceberPropostaComoParticipante(Troca troca) throws InterruptedException {
-        Colecionador instancia = Colecionador.getInstancia();
-        instancia.getTrocasSolicitadas().add(troca);
-        JanelaPrincipal.atualizarTabelaTransacoes();
-    }
-    
-    @Override
-    public ArrayList<Cartao> ListarCartoes() {
-        try {
-            IOCartao ioc = new IOCartao();
-            return ioc.RecuperarCartoes();
-        } catch (Exception ex) {
-            Logger.getLogger(RMIClient.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
     }
     
     /**
@@ -64,6 +41,59 @@ public class RMIServer extends UnicastRemoteObject implements ComunicacaoServer 
         Registry reg = LocateRegistry.createRegistry(logado.getPorta());
         reg.bind(nomeServer, new RMIServer());
         System.out.println("RMIServer criado e registrado");
-    }    
+    }
 
+    @Override
+    public void ReceberPropostaComoCoordenador(Troca troca) throws InterruptedException {
+        Colecionador logado = Colecionador.getInstancia();
+        logado.getTrocasQueSouCoordenador().add(troca);
+    }
+    
+    @Override
+    public void ReceberPropostaComoParticipante(Troca troca) throws InterruptedException {
+        Colecionador instancia = Colecionador.getInstancia();
+        instancia.getTrocasQueSouParticipante().add(troca);
+        JanelaPrincipal.atualizarTabelaTransacoes();
+    }
+    
+    @Override
+    public ArrayList<Cartao> ListarCartoes() {
+        try {
+            IOCartao ioc = new IOCartao();
+            return ioc.RecuperarCartoes();
+        } catch (Exception ex) {
+            Logger.getLogger(RMIClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    @Override
+    public void AtualizarTroca(Troca troca) throws Exception {
+        Colecionador instancia = Colecionador.getInstancia();
+//        if (instancia.getIdColecionador() == troca.getIdSolicitante()) {
+//            instancia.getTrocaQueSouParticipantePorId(null)
+//        }
+//        if (instancia.getIdColecionador() == troca.getIdSolicitado()) {
+//            
+//        }
+    }
+    
+    @Override
+    public void ReceberRespostaTroca(String idTroca, int idParticipante, boolean aceito) throws Exception {
+        Colecionador instancia = Colecionador.getInstancia();
+        int indice = -1;
+        for (int i = 0; i < instancia.getTrocasQueSouCoordenador().size(); i++) {
+            if (instancia.getTrocasQueSouCoordenador().get(i).getId().equalsIgnoreCase(idTroca)) {
+                indice = i;
+            }
+        }
+        if (instancia.getTrocasQueSouCoordenador().get(indice).getIdSolicitado() == idParticipante) {
+            instancia.getTrocasQueSouCoordenador().get(indice).setSolicitadoAceita(aceito);
+            instancia.getTrocasQueSouCoordenador().get(indice).setSolicitadoRespondeu(true);
+        }
+        if (instancia.getTrocasQueSouCoordenador().get(indice).getIdSolicitante()== idParticipante) {
+            instancia.getTrocasQueSouCoordenador().get(indice).setSolicitanteAceita(aceito);
+        }
+    }
+    
 }

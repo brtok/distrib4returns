@@ -11,6 +11,7 @@ import Comunicacao.MulticastTeste;
 import Comunicacao.RMIServer;
 import Controle.IOCartao;
 import Controle.IOColecionador;
+import Controle.ThreadCoordenacao;
 import Modelo.Colecionador;
 import static java.lang.Thread.sleep;
 import javax.swing.JOptionPane;
@@ -124,18 +125,26 @@ public class JanelaInicial extends javax.swing.JFrame {
                 Colecionador.setInstancia(colecionadorLogado);
                 IOCartao iocartao = new IOCartao();
                 iocartao.RecuperarCartoes();
-                JanelaPrincipal jp = new JanelaPrincipal();
-                jp.setVisible(true);
-                this.dispose();              
                 RMIServer rmis = new RMIServer();
                 rmis.IniciaRMI();
-                MulticastEnvio me = new MulticastEnvio();
-                me.start();
-                sleep(1000);
+                
+                this.dispose();
+                JanelaPrincipal jp = new JanelaPrincipal();
+                
                 MulticastRecebimento mr = new MulticastRecebimento();
                 mr.start();
+                sleep(1500);
+                MulticastEnvio me = new MulticastEnvio();
+                me.start();
+                sleep(800);
+                
+                jp.setVisible(true);
+                
                 MulticastTeste mt = new MulticastTeste();
                 mt.start();
+                sleep(800);
+                ThreadCoordenacao tc = new ThreadCoordenacao();
+                tc.start();
             }
         } catch (Exception e) {
             e.printStackTrace();
