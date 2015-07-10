@@ -6,8 +6,8 @@
 package GUI;
 
 import Comunicacao.RMIClient;
-import IOarquivo.IOCartao;
-import IOarquivo.IOColecionador;
+import Controle.IOCartao;
+import Controle.IOColecionador;
 import Modelo.Cartao;
 import Modelo.Colecionador;
 import Modelo.ColecionadorEncontrado;

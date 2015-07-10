@@ -5,7 +5,7 @@
  */
 package GUI;
 
-import IOarquivo.IOColecionador;
+import Controle.IOColecionador;
 import Modelo.Colecionador;
 
 /**

@@ -6,7 +6,7 @@
 package Comunicacao;
 
 import GUI.JanelaPrincipal;
-import IOarquivo.IOCartao;
+import Controle.IOCartao;
 import Interface.ComunicacaoServer;
 import Modelo.Cartao;
 import Modelo.Colecionador;

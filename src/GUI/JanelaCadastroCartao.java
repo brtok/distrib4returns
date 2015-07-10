@@ -5,7 +5,7 @@
  */
 package GUI;
 
-import IOarquivo.IOCartao;
+import Controle.IOCartao;
 import Modelo.Cartao;
 import Modelo.Colecionador;
 import java.util.logging.Level;

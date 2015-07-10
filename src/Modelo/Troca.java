@@ -19,7 +19,6 @@ public class Troca implements Serializable{
     private Cartao cartaoManda;
     private Cartao cartaoRecebe;
     private int idCoordenador;
-    private boolean euPediTroca;
     
     
     //1: Aguardando, 2: Efetuada, 3: Recusada
@@ -79,14 +78,6 @@ public class Troca implements Serializable{
 
     public void setIdCoordenador(int idCoordenador) {
         this.idCoordenador = idCoordenador;
-    }
-
-    public boolean isEuPediTroca() {
-        return euPediTroca;
-    }
-
-    public void setEuPediTroca(boolean euPediTroca) {
-        this.euPediTroca = euPediTroca;
     }
     
 }
