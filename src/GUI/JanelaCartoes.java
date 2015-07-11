@@ -195,8 +195,8 @@ public class JanelaCartoes extends javax.swing.JDialog {
 
     private void btnNovoCartaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoCartaoActionPerformed
         JanelaCadastroCartao jcc = new JanelaCadastroCartao();
-        jcc.setVisible(true);
         this.dispose();
+        jcc.setVisible(true);        
     }//GEN-LAST:event_btnNovoCartaoActionPerformed
 
     private void btnPedirTrocaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPedirTrocaActionPerformed
