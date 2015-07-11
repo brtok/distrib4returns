@@ -153,8 +153,7 @@ public class JanelaSolicitacaoTroca extends javax.swing.JFrame {
                     dispose();
                 } else {
                     Troca troca = new Troca(idTroca, logado.getIdColecionador(), idOutroColecionador, coordenador, meuCartao, outroCartao);
-                    ColecionadorEncontrado conexao = logado.getUsuarioParticipantePorId(idOutroColecionador);
-                    RMIClient rmic = new RMIClient(conexao);
+                    RMIClient rmic = new RMIClient(coordenador);
                     logado.getTrocasQueSouParticipante().add(troca);
                     rmic.EnviaPropostaParaCoordenador(troca);
                     JanelaPrincipal.atualizarTabelaTransacoes();

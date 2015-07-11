@@ -64,8 +64,7 @@ public class JanelaCartoes extends javax.swing.JDialog {
                 PopulaTabela(tabela);
             }
         } else {
-            ColecionadorEncontrado conexao = logado.getUsuarioParticipantePorId(idUsuario);
-            RMIClient rmic = new RMIClient(conexao);
+            RMIClient rmic = new RMIClient(idUsuario);
             cartoes = rmic.SolicitaListaCartoes(idUsuario);
             if (cartoes != null) {
                 Object[][] tabela = new Object[cartoes.size()][3];

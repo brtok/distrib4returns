@@ -23,14 +23,10 @@ public class MulticastTeste extends Thread {
             sleep(10000);
             while (true) {
                 Colecionador instancia = Colecionador.getInstancia();
-                ArrayList<ColecionadorEncontrado> excluir = new ArrayList<ColecionadorEncontrado>();
                 for (ColecionadorEncontrado ce : instancia.getListaParticipantes()) {
                     if (System.currentTimeMillis() > ce.getConsiderarQueda()) {
-                        excluir.add(ce);
+                        ce.setAtivo(false);
                     }
-                }
-                for (ColecionadorEncontrado e : excluir) {
-                    instancia.getListaParticipantes().remove(e);
                 }
                 sleep(10000);
             }

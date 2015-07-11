@@ -14,6 +14,8 @@ import Controle.IOColecionador;
 import Controle.ThreadCoordenacao;
 import Modelo.Colecionador;
 import static java.lang.Thread.sleep;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -27,6 +29,39 @@ public class JanelaInicial extends javax.swing.JFrame {
      */
     public JanelaInicial() {
         initComponents();
+    }
+
+    private void ProcedimentoDeEntrada() throws Exception {
+        IOColecionador ioc = new IOColecionador();
+        Colecionador colecionadorLogado = ioc.RecuperaColecionadorPorID(Integer.parseInt(txtID.getText()));
+        if (colecionadorLogado != null) {
+            int gerado = 2000 + (int) (Math.random() * 1000);
+            System.out.println(gerado);
+            colecionadorLogado.setPorta(gerado);
+            Colecionador.setInstancia(colecionadorLogado);
+            IOCartao iocartao = new IOCartao();
+            iocartao.RecuperarCartoes();
+            RMIServer rmis = new RMIServer();
+            rmis.IniciaRMI();
+
+            this.dispose();
+            JanelaPrincipal jp = new JanelaPrincipal();
+
+            MulticastRecebimento mr = new MulticastRecebimento();
+            mr.start();
+            sleep(1500);
+            MulticastEnvio me = new MulticastEnvio();
+            me.start();
+            sleep(800);
+
+            jp.setVisible(true);
+
+            MulticastTeste mt = new MulticastTeste();
+            mt.start();
+            sleep(800);
+            ThreadCoordenacao tc = new ThreadCoordenacao();
+            tc.start();
+        }
     }
 
     /**
@@ -49,6 +84,12 @@ public class JanelaInicial extends javax.swing.JFrame {
         setResizable(false);
 
         jLabel1.setText("ID:");
+
+        txtID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIDActionPerformed(evt);
+            }
+        });
 
         btnEntrar.setText("Entrar");
         btnEntrar.addActionListener(new java.awt.event.ActionListener() {
@@ -115,57 +156,31 @@ public class JanelaInicial extends javax.swing.JFrame {
 
     private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarActionPerformed
         try {
-            Colecionador colecionadorLogado = new Colecionador();
-            IOColecionador ioc = new IOColecionador();
-            colecionadorLogado = ioc.RecuperaColecionadorPorID(Integer.parseInt(txtID.getText()));
-            if (colecionadorLogado != null) {
-                int gerado = 2000 + (int) (Math.random()*1000);
-                System.out.println(gerado);
-                colecionadorLogado.setPorta(gerado);
-                Colecionador.setInstancia(colecionadorLogado);
-                IOCartao iocartao = new IOCartao();
-                iocartao.RecuperarCartoes();
-                RMIServer rmis = new RMIServer();
-                rmis.IniciaRMI();
-                
-                this.dispose();
-                JanelaPrincipal jp = new JanelaPrincipal();
-                
-                MulticastRecebimento mr = new MulticastRecebimento();
-                mr.start();
-                sleep(1500);
-                MulticastEnvio me = new MulticastEnvio();
-                me.start();
-                sleep(800);
-                
-                jp.setVisible(true);
-                
-                MulticastTeste mt = new MulticastTeste();
-                mt.start();
-                sleep(800);
-                ThreadCoordenacao tc = new ThreadCoordenacao();
-                tc.start();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+            ProcedimentoDeEntrada();
+        } catch (Exception ex) {
+            Logger.getLogger(JanelaInicial.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnEntrarActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-        
         int id = 0;
-        if (!txtID.getText().equalsIgnoreCase(""))
-        {
+        if (!txtID.getText().equalsIgnoreCase("")) {
             id = Integer.parseInt(txtID.getText());
             JanelaCadastroColecionador jcc = new JanelaCadastroColecionador(id);
             jcc.setVisible(true);
-        } else
-        {
+            btnEntrar.grabFocus();
+        } else {
             JOptionPane.showMessageDialog(null, "Preencha o ID!");
         }
-        
-        
     }//GEN-LAST:event_btnCadastrarActionPerformed
+
+    private void txtIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDActionPerformed
+        try {
+            ProcedimentoDeEntrada();
+        } catch (Exception ex) {
+            Logger.getLogger(JanelaInicial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_txtIDActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCadastrar;

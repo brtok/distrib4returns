@@ -31,12 +31,18 @@ public class JanelaPrincipal extends javax.swing.JFrame {
 
     public static void atualizarTabelaColecionadores() {
         Colecionador instancia = Colecionador.getInstancia();
-        ArrayList<ColecionadorEncontrado> usuarios = instancia.getListaParticipantes();
-        Object[][] tabela = new Object[usuarios.size()][3];
-        for (int i = 0; i < usuarios.size(); i++) {
-            tabela[i][0] = usuarios.get(i).getIdColecionador();
-            tabela[i][1] = usuarios.get(i).getNome();
-            tabela[i][2] = usuarios.get(i).getNumeroCartoes();
+        ArrayList<ColecionadorEncontrado> usuariosTodos = instancia.getListaParticipantes();
+        ArrayList<ColecionadorEncontrado> usuariosOnline = new ArrayList<>();
+        for (ColecionadorEncontrado ce : usuariosTodos) {
+            if (ce.isAtivo()) {
+                usuariosOnline.add(ce);
+            }
+        }
+        Object[][] tabela = new Object[usuariosOnline.size()][3];
+        for (int i = 0; i < usuariosOnline.size(); i++) {
+            tabela[i][0] = usuariosOnline.get(i).getIdColecionador();
+            tabela[i][1] = usuariosOnline.get(i).getNome();
+            tabela[i][2] = usuariosOnline.get(i).getNumeroCartoes();
         }
 
         //popularTabela

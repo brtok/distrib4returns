@@ -3,6 +3,7 @@
 <Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
+    <Property name="resizable" type="boolean" value="false"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -37,10 +38,10 @@
                       <Component id="txtTroca" min="-2" pref="480" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="btnAceitarTroca" min="-2" pref="226" max="-2" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="botaoAceitar" min="-2" pref="223" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="btnRejeitarTroca" min="-2" pref="223" max="-2" attributes="0"/>
+                      <Component id="botaoRejeitar" min="-2" pref="223" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -60,10 +61,10 @@
               <Component id="txtTroca" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="btnAceitarTroca" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnRejeitarTroca" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="botaoRejeitar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="botaoAceitar" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="24" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -95,15 +96,27 @@
         <Property name="text" type="java.lang.String" value="LABELSTATUS"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="btnAceitarTroca">
+    <Component class="javax.swing.JButton" name="botaoAceitar">
       <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="99" red="0" type="rgb"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Aceitar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botaoAceitarActionPerformed"/>
+      </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="btnRejeitarTroca">
+    <Component class="javax.swing.JButton" name="botaoRejeitar">
       <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="0" red="cc" type="rgb"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Rejeitar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botaoRejeitarActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

@@ -8,6 +8,7 @@ package Comunicacao;
 import Interface.ComunicacaoClient;
 import Interface.ComunicacaoServer;
 import Modelo.Cartao;
+import Modelo.Colecionador;
 import Modelo.ColecionadorEncontrado;
 import Modelo.Troca;
 import java.rmi.registry.LocateRegistry;
@@ -24,8 +25,10 @@ public class RMIClient extends UnicastRemoteObject implements ComunicacaoClient 
     private Registry reg;
     private ComunicacaoServer obj;
 
-    public RMIClient(ColecionadorEncontrado conexao) throws Exception {
+    public RMIClient(int idConexao) throws Exception {
         super();
+        Colecionador logado = Colecionador.getInstancia();
+        ColecionadorEncontrado conexao = logado.getUsuarioParticipantePorId(idConexao);
         reg = LocateRegistry.getRegistry("localhost", conexao.getPorta());
         String nomeServer = "servidor" + conexao.getIdColecionador();
         nomeServer = nomeServer.trim();
@@ -43,8 +46,13 @@ public class RMIClient extends UnicastRemoteObject implements ComunicacaoClient 
     }
     
     @Override
-    public void EnviarAtualizacaoTroca(Troca troca) throws Exception {
-        obj.AtualizarTroca(troca);
+    public void EnviaPropostaParaParticipante(Troca troca) throws Exception {
+        obj.ReceberPropostaComoParticipante(troca);
+    }
+    
+    @Override
+    public void EnviarAtualizacaoTroca(String idTroca, int situacaoTroca, boolean solicitanteAceita, boolean solicitadoAceita) throws Exception {
+        obj.AtualizarTroca(idTroca, situacaoTroca, solicitanteAceita, solicitadoAceita);
     }
     
     @Override

@@ -5,11 +5,14 @@
  */
 package GUI;
 
+import Comunicacao.RMIClient;
 import Modelo.Cartao;
 import Modelo.Colecionador;
 import Modelo.ColecionadorEncontrado;
 import Modelo.Troca;
 import static java.lang.Thread.sleep;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -28,41 +31,64 @@ public class JanelaDadosTroca extends javax.swing.JDialog {
     public JanelaDadosTroca(String idTroca) throws InterruptedException {
         initComponents();
         setModal(true);
+
         Colecionador logado = Colecionador.getInstancia();
+        this.setTitle("Solicitação de Troca - " + logado.getIdColecionador());
+
         troca = logado.getTrocaQueSouParticipantePorId(idTroca);
-        this.setTitle("Nova Solicitação - " + logado.getIdColecionador());
-        Cartao cartaoRecebe = troca.getCartaoManda();
-        Cartao cartaoManda = troca.getCartaoRecebe();
-        ColecionadorEncontrado outroColecionador = logado.getUsuarioParticipantePorId(troca.getIdSolicitante());
-        String textoTroca = "Trocar " + cartaoRecebe.getIdCartao() + " - " + cartaoRecebe.getLocal()
-                + " por " + cartaoManda.getIdCartao() + " - " + cartaoManda.getLocal() + " com "
-                + outroColecionador.getIdColecionador() + " - " + outroColecionador.getNome();
-        txtTroca.setText(textoTroca);
+        Cartao cartaoRecebe;
+        Cartao cartaoManda;
+        ColecionadorEncontrado outroColecionador;
+
+        //Verificar se sou solicitante ou solicitado
+        if (troca.getIdSolicitado() == logado.getIdColecionador()) {
+            cartaoRecebe = troca.getCartaoManda();
+            cartaoManda = troca.getCartaoRecebe();
+            outroColecionador = logado.getUsuarioParticipantePorId(troca.getIdSolicitante());
+        } else {
+            cartaoRecebe = troca.getCartaoRecebe();
+            cartaoManda = troca.getCartaoManda();
+            botaoAceitar.setVisible(false);
+            botaoRejeitar.setText("Cancelar Solicitação");
+            outroColecionador = logado.getUsuarioParticipantePorId(troca.getIdSolicitado());
+        }
         
+        
+        String textoTroca = "Trocar meu " + cartaoManda.getIdCartao() + "-" + cartaoManda.getLocal()
+                + " por " + cartaoRecebe.getIdCartao() + "-" + cartaoRecebe.getLocal() + " do usuário "
+                + outroColecionador.getIdColecionador() + "-" + outroColecionador.getNome();
+        txtTroca.setText(textoTroca);
+
         switch (troca.getSituacaoTroca()) {
             case 1:
                 labelStatus.setForeground(new java.awt.Color(0, 102, 204));
-                labelStatus.setText("Aguardando");
+                labelStatus.setText("1-Aguardando");
                 break;
             case 2:
                 labelStatus.setForeground(new java.awt.Color(0, 102, 204));
-                labelStatus.setText("Aguardando");
+                labelStatus.setText("2-Aguardando");
                 break;
             case 3:
                 labelStatus.setForeground(new java.awt.Color(0, 102, 204));
-                labelStatus.setText("Aguardando");
+                labelStatus.setText("3-Aguardando");
                 break;
             case 4:
                 labelStatus.setForeground(new java.awt.Color(0, 153, 51));
-                labelStatus.setText("Aguardando");
+                labelStatus.setText("4-Aguardando");
+                botaoAceitar.setVisible(false);
+                botaoRejeitar.setVisible(false);
                 break;
             case 5:
                 labelStatus.setForeground(new java.awt.Color(0, 153, 51));
-                labelStatus.setText("Efetuada");
+                labelStatus.setText("5-Efetuada");
+                botaoAceitar.setVisible(false);
+                botaoRejeitar.setVisible(false);
                 break;
             case 6:
                 labelStatus.setForeground(new java.awt.Color(204, 0, 0));
-                labelStatus.setText("Cancelada/Recusada");
+                labelStatus.setText("6-Cancelada/Recusada");
+                botaoAceitar.setVisible(false);
+                botaoRejeitar.setVisible(false);
                 break;
             default:
                 labelStatus.setText("ERRO");
@@ -70,7 +96,7 @@ public class JanelaDadosTroca extends javax.swing.JDialog {
                 dispose();
                 break;
         }
-        
+
     }
 
     /**
@@ -86,10 +112,11 @@ public class JanelaDadosTroca extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         txtTroca = new javax.swing.JTextField();
         labelStatus = new javax.swing.JLabel();
-        btnAceitarTroca = new javax.swing.JButton();
-        btnRejeitarTroca = new javax.swing.JButton();
+        botaoAceitar = new javax.swing.JButton();
+        botaoRejeitar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setText("Solicitação de Troca");
@@ -101,9 +128,21 @@ public class JanelaDadosTroca extends javax.swing.JDialog {
         labelStatus.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         labelStatus.setText("LABELSTATUS");
 
-        btnAceitarTroca.setText("Aceitar");
+        botaoAceitar.setBackground(new java.awt.Color(0, 153, 0));
+        botaoAceitar.setText("Aceitar");
+        botaoAceitar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoAceitarActionPerformed(evt);
+            }
+        });
 
-        btnRejeitarTroca.setText("Rejeitar");
+        botaoRejeitar.setBackground(new java.awt.Color(204, 0, 0));
+        botaoRejeitar.setText("Rejeitar");
+        botaoRejeitar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoRejeitarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -121,10 +160,10 @@ public class JanelaDadosTroca extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(txtTroca, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnAceitarTroca, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(botaoAceitar, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnRejeitarTroca, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(botaoRejeitar, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -139,18 +178,40 @@ public class JanelaDadosTroca extends javax.swing.JDialog {
                 .addComponent(txtTroca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAceitarTroca)
-                    .addComponent(btnRejeitarTroca))
-                .addContainerGap(24, Short.MAX_VALUE))
+                    .addComponent(botaoRejeitar)
+                    .addComponent(botaoAceitar))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void botaoAceitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoAceitarActionPerformed
+        try {
+            Colecionador logado = Colecionador.getInstancia();
+            RMIClient rmic = new RMIClient(troca.getIdCoordenador());
+            rmic.ResponderTroca(troca.getId(), logado.getIdColecionador(), true);
+            dispose();
+        } catch (Exception ex) {
+            Logger.getLogger(JanelaDadosTroca.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_botaoAceitarActionPerformed
+
+    private void botaoRejeitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoRejeitarActionPerformed
+        try {
+            Colecionador logado = Colecionador.getInstancia();
+            RMIClient rmic = new RMIClient(troca.getIdCoordenador());
+            rmic.ResponderTroca(troca.getId(), logado.getIdColecionador(), false);
+            dispose();
+        } catch (Exception ex) {
+            Logger.getLogger(JanelaDadosTroca.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_botaoRejeitarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAceitarTroca;
-    private javax.swing.JButton btnRejeitarTroca;
+    private javax.swing.JButton botaoAceitar;
+    private javax.swing.JButton botaoRejeitar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel labelStatus;

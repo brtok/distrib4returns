@@ -18,6 +18,7 @@ public class ColecionadorEncontrado implements Serializable {
     private String nome;
     private int numeroCartoes;
     private int porta;
+    private boolean ativo;
 
     public ColecionadorEncontrado(int idColecionador, int porta, long considerarQueda, String nome, int numeroCartoes) {
         this.idColecionador = idColecionador;
@@ -25,6 +26,7 @@ public class ColecionadorEncontrado implements Serializable {
         this.nome = nome;
         this.porta = porta;
         this.numeroCartoes = numeroCartoes;
+        ativo = true;
     }
 
     public int getIdColecionador() {
@@ -65,6 +67,14 @@ public class ColecionadorEncontrado implements Serializable {
 
     public void setPorta(int porta) {
         this.porta = porta;
+    }
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
     }
     
 }

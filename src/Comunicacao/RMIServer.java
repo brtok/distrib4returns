@@ -68,14 +68,18 @@ public class RMIServer extends UnicastRemoteObject implements ComunicacaoServer 
     }
 
     @Override
-    public void AtualizarTroca(Troca troca) throws Exception {
+    public void AtualizarTroca(String idTroca, int situacaoTroca, boolean solicitanteAceita, boolean solicitadoAceita) throws Exception {
         Colecionador instancia = Colecionador.getInstancia();
-//        if (instancia.getIdColecionador() == troca.getIdSolicitante()) {
-//            instancia.getTrocaQueSouParticipantePorId(null)
-//        }
-//        if (instancia.getIdColecionador() == troca.getIdSolicitado()) {
-//            
-//        }
+        int indice = -1;
+        for (int i = 0; i < instancia.getTrocasQueSouParticipante().size(); i++) {
+            if (instancia.getTrocasQueSouParticipante().get(i).getId().equalsIgnoreCase(idTroca)) {
+                indice = i;
+            }
+        }
+        instancia.getTrocasQueSouParticipante().get(indice).setSituacaoTroca(situacaoTroca);
+        instancia.getTrocasQueSouParticipante().get(indice).setSolicitanteAceita(solicitanteAceita);
+        instancia.getTrocasQueSouParticipante().get(indice).setSolicitadoAceita(solicitadoAceita);
+        JanelaPrincipal.atualizarTabelaTransacoes();
     }
     
     @Override
@@ -89,7 +93,7 @@ public class RMIServer extends UnicastRemoteObject implements ComunicacaoServer 
         }
         if (instancia.getTrocasQueSouCoordenador().get(indice).getIdSolicitado() == idParticipante) {
             instancia.getTrocasQueSouCoordenador().get(indice).setSolicitadoAceita(aceito);
-            instancia.getTrocasQueSouCoordenador().get(indice).setSolicitadoRespondeu(true);
+            instancia.getTrocasQueSouCoordenador().get(indice).setSituacaoTroca(3);
         }
         if (instancia.getTrocasQueSouCoordenador().get(indice).getIdSolicitante()== idParticipante) {
             instancia.getTrocasQueSouCoordenador().get(indice).setSolicitanteAceita(aceito);
