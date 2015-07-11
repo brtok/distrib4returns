@@ -95,9 +95,36 @@ public class RMIServer extends UnicastRemoteObject implements ComunicacaoServer 
             instancia.getTrocasQueSouCoordenador().get(indice).setSolicitadoAceita(aceito);
             instancia.getTrocasQueSouCoordenador().get(indice).setSituacaoTroca(3);
         }
-        if (instancia.getTrocasQueSouCoordenador().get(indice).getIdSolicitante()== idParticipante) {
-            instancia.getTrocasQueSouCoordenador().get(indice).setSolicitanteAceita(aceito);
+//        if (instancia.getTrocasQueSouCoordenador().get(indice).getIdSolicitante()== idParticipante) {
+//            instancia.getTrocasQueSouCoordenador().get(indice).setSolicitanteAceita(aceito);
+//        }
+    }
+
+    @Override
+    public boolean ResponderPropriedadeCartao(int idCartao) throws Exception{
+        
+        IOCartao iocar = new IOCartao();
+        
+        Cartao cartao = iocar.RecuperarCartaoPorID(idCartao);
+        
+        if(cartao == null)
+        {
+            return false;
+        }else
+        {
+            return true;
         }
     }
-    
+
+    @Override
+    public void AdicionaCartao(Cartao cartao) throws Exception {
+        IOCartao iocar = new IOCartao();
+        iocar.SalvaCartao(cartao);
+    }
+
+    @Override
+    public void RetiraCartao(int idCartao) throws Exception {
+        IOCartao iocar = new IOCartao();
+        iocar.ExcluirCartao(idCartao);
+    }
 }

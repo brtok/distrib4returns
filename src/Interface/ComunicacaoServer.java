@@ -26,4 +26,10 @@ public interface ComunicacaoServer extends Remote {
     
     void ReceberRespostaTroca(String idTroca, int idParticipante, boolean aceito) throws Exception;
     
+    boolean ResponderPropriedadeCartao(int idCartao) throws Exception;
+    
+    void AdicionaCartao(Cartao cartao) throws Exception;
+    
+    void RetiraCartao(int idCartao) throws Exception;
+    
 }

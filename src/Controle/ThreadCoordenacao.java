@@ -27,6 +27,7 @@ public class ThreadCoordenacao extends Thread {
     public void run() {
         try {
             logado = Colecionador.getInstancia();
+            RMIClient rmic;
             while (true) {
                 for (Troca t : logado.getTrocasQueSouCoordenador()) {
                     //PRIMEIRO TESTE: se alguém caiu, cancelar a transação
@@ -47,7 +48,7 @@ public class ThreadCoordenacao extends Thread {
                         //Repassa para o Solicitado
                         case 1:
                             t.setSituacaoTroca(2);
-                            RMIClient rmic = new RMIClient(t.getIdSolicitado());
+                            rmic = new RMIClient(t.getIdSolicitado());
                             rmic.EnviaPropostaParaParticipante(t);
                             AtualizarSolicitante(t);
                             break;
@@ -60,8 +61,35 @@ public class ThreadCoordenacao extends Thread {
                                 AtualizarSolicitante(t);
                             }
                             break;
+                        //Se o solicitado aceitou, inicia o segundo passo da verificação
                         case 3:
-
+                            System.out.println("Troca aceita");
+                            t.setSituacaoTroca(3);
+                            AtualizarSolicitado(t);
+                            AtualizarSolicitante(t);
+                            
+                            //Verificar se o solicitante ainda possui o cartão
+                            rmic = new RMIClient(t.getIdSolicitante());
+                            boolean solicitanteTemCartao = rmic.VerificaPropriedadeCartao(t.getCartaoManda().getIdCartao());
+                            System.out.println("Solicitante tem cartao " + solicitanteTemCartao);
+                            
+                            //Verifica se o solicitado ainda possui o cartão
+                            rmic = new RMIClient(t.getIdSolicitado());
+                            boolean solicitadoTemCartao = rmic.VerificaPropriedadeCartao(t.getCartaoRecebe().getIdCartao());
+                            System.out.println("Solicitado tem cartão " + solicitadoTemCartao);
+                            
+                            //Se os dois tiverem o cartão, efetua a troca
+                            if(solicitanteTemCartao && solicitadoTemCartao)
+                            {
+                                EfetuarTroca(t);
+                                t.setSituacaoTroca(5);
+                            }else
+                            {
+                                t.setSituacaoTroca(6);
+                            }
+                                                        
+                            AtualizarSolicitado(t);
+                            AtualizarSolicitante(t);
                             break;
                         case 4:
 
@@ -92,11 +120,32 @@ public class ThreadCoordenacao extends Thread {
     public void AtualizarSolicitante(Troca troca) throws Exception {
         RMIClient rmic = new RMIClient(troca.getIdSolicitante());
         rmic.EnviarAtualizacaoTroca(troca.getId(), troca.getSituacaoTroca(), troca.isSolicitadoAceita(), troca.isSolicitadoAceita());
+        System.out.println("Atualizou o solcitante " + troca.getIdSolicitante());
     }
 
     public void AtualizarSolicitado(Troca troca) throws Exception {
         RMIClient rmic = new RMIClient(troca.getIdSolicitado());
         rmic.EnviarAtualizacaoTroca(troca.getId(), troca.getSituacaoTroca(), troca.isSolicitadoAceita(), troca.isSolicitadoAceita());
+        System.out.println("Atualizou o solicitado " + troca.getIdSolicitado());
+    }
+    
+    public void EfetuarTroca(Troca troca) throws Exception
+    {
+        RMIClient rmiSolicitante = new RMIClient(troca.getIdSolicitante());
+        RMIClient rmiSolicitado = new RMIClient(troca.getIdSolicitado());
+        
+        //Entrega o novo cartão ao solicitado
+        rmiSolicitado.RecebeCartao(troca.getCartaoManda());
+        
+        //Retira o cartão trocado do solicitante
+        rmiSolicitante.EnviaCartao(troca.getCartaoManda().getIdCartao());
+        
+        //Entrega o novo cartão ao solicitante
+        rmiSolicitante.RecebeCartao(troca.getCartaoRecebe());
+        
+        //Retira o cartão trocado do do solicitado
+        rmiSolicitado.EnviaCartao(troca.getCartaoRecebe().getIdCartao());
+        
     }
 
 }

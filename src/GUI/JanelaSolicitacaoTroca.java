@@ -141,6 +141,8 @@ public class JanelaSolicitacaoTroca extends javax.swing.JFrame {
                 String idTroca = String.valueOf(logado.getIdColecionador())
                         + String.valueOf(1000 + (int) (Math.random() * 8000));
                 int coordenador = -1;
+                
+                //Elege um coordenador
                 for (int i = 0; i < logado.getListaParticipantes().size(); i++) {
                     if (logado.getListaParticipantes().get(i).getIdColecionador() != idOutroColecionador
                             && logado.getListaParticipantes().get(i).getIdColecionador() != logado.getIdColecionador()) {
@@ -148,8 +150,9 @@ public class JanelaSolicitacaoTroca extends javax.swing.JFrame {
                         break;
                     }
                 }
+                
                 if (coordenador < 0) {
-                    JOptionPane.showMessageDialog(null, "erro!");
+                    JOptionPane.showMessageDialog(null, "Erro ao eleger um coordenador. A troca não poderá ser efetuada.");
                     dispose();
                 } else {
                     Troca troca = new Troca(idTroca, logado.getIdColecionador(), idOutroColecionador, coordenador, meuCartao, outroCartao);

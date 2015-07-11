@@ -59,5 +59,23 @@ public class RMIClient extends UnicastRemoteObject implements ComunicacaoClient 
     public void ResponderTroca(String idTroca, int idParticipante, boolean aceito) throws Exception {
         obj.ReceberRespostaTroca(idTroca, idParticipante, aceito);
     }
+
+    @Override
+    public boolean VerificaPropriedadeCartao(int idCartao) throws Exception {
+        
+        boolean possuiCartao = obj.ResponderPropriedadeCartao(idCartao);
+        
+        return possuiCartao;
+    }
+
+    @Override
+    public void RecebeCartao(Cartao cartao) throws Exception {
+        obj.AdicionaCartao(cartao);
+    }
+
+    @Override
+    public void EnviaCartao(int idCartao) throws Exception {
+        obj.RetiraCartao(idCartao);
+    }
     
 }

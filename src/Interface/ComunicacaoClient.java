@@ -5,6 +5,7 @@
  */
 package Interface;
 
+import Modelo.Cartao;
 import Modelo.Troca;
 import java.rmi.Remote;
 
@@ -21,4 +22,10 @@ public interface ComunicacaoClient extends Remote {
     void EnviarAtualizacaoTroca(String idTroca, int situacaoTroca, boolean solicitanteAceita, boolean solicitadoAceita) throws Exception;
     
     void ResponderTroca(String idTroca, int idParticipante, boolean aceito) throws Exception;
+    
+    boolean VerificaPropriedadeCartao(int idCartao) throws Exception;
+    
+    void RecebeCartao(Cartao cartao) throws Exception;
+    
+    void EnviaCartao(int idCartao) throws Exception;
 }
