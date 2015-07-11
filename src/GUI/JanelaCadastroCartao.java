@@ -10,6 +10,7 @@ import Modelo.Cartao;
 import Modelo.Colecionador;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -124,6 +125,7 @@ public class JanelaCadastroCartao extends javax.swing.JDialog {
             boolean salvou = iocar.SalvaCartao(c);
 
             if (salvou) {
+                JOptionPane.showMessageDialog(null, "Cartão ID " + c.getIdCartao() + " cadastrado com sucesso.");
                 this.dispose();
                 Colecionador instancia = Colecionador.getInstancia();
                 JanelaCartoes jc = new JanelaCartoes(instancia.getIdColecionador());

@@ -89,7 +89,10 @@ public class ThreadCoordenacao extends Thread {
                             AtualizarSolicitado(t);
                             AtualizarSolicitante(t);
                             break;
-                        case 4:
+                        case 6:
+                            
+                            AtualizarSolicitado(t);
+                            AtualizarSolicitante(t);
 
                             break;
                     }

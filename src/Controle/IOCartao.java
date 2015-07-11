@@ -54,7 +54,7 @@ public class IOCartao {
             ObjectOutputStream objGravar = new ObjectOutputStream(arquivoGrav);
             objGravar.writeObject(cartoes);
             logado.setCartoes(cartoes);
-            JOptionPane.showMessageDialog(null, "Cartão ID " + cartao.getIdCartao() + " cadastrado com sucesso.");
+            
             return true;
         }
     }

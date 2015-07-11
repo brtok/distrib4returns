@@ -11,6 +11,7 @@ import Interface.ComunicacaoServer;
 import Modelo.Cartao;
 import Modelo.Colecionador;
 import Modelo.Troca;
+import static java.lang.Thread.sleep;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -21,19 +22,19 @@ import java.util.logging.Logger;
 
 /**
  * Métodos acessíveis aos outros colecionadores via RMI
+ *
  * @author Rafael
  */
 public class RMIServer extends UnicastRemoteObject implements ComunicacaoServer {
-    
-    
+
     public RMIServer() throws RemoteException {
         super();
     }
-    
+
     /**
      * Método para Registro e declaração Inicial do Serviço de RMI
-     * 
-     * @throws Exception 
+     *
+     * @throws Exception
      */
     public void IniciaRMI() throws Exception {
         Colecionador logado = Colecionador.getInstancia();
@@ -48,14 +49,14 @@ public class RMIServer extends UnicastRemoteObject implements ComunicacaoServer 
         Colecionador logado = Colecionador.getInstancia();
         logado.getTrocasQueSouCoordenador().add(troca);
     }
-    
+
     @Override
     public void ReceberPropostaComoParticipante(Troca troca) throws InterruptedException {
         Colecionador instancia = Colecionador.getInstancia();
         instancia.getTrocasQueSouParticipante().add(troca);
         JanelaPrincipal.atualizarTabelaTransacoes();
     }
-    
+
     @Override
     public ArrayList<Cartao> ListarCartoes() {
         try {
@@ -81,7 +82,7 @@ public class RMIServer extends UnicastRemoteObject implements ComunicacaoServer 
         instancia.getTrocasQueSouParticipante().get(indice).setSolicitadoAceita(solicitadoAceita);
         JanelaPrincipal.atualizarTabelaTransacoes();
     }
-    
+
     @Override
     public void ReceberRespostaTroca(String idTroca, int idParticipante, boolean aceito) throws Exception {
         Colecionador instancia = Colecionador.getInstancia();
@@ -92,8 +93,14 @@ public class RMIServer extends UnicastRemoteObject implements ComunicacaoServer 
             }
         }
         if (instancia.getTrocasQueSouCoordenador().get(indice).getIdSolicitado() == idParticipante) {
+
             instancia.getTrocasQueSouCoordenador().get(indice).setSolicitadoAceita(aceito);
-            instancia.getTrocasQueSouCoordenador().get(indice).setSituacaoTroca(3);
+            if (aceito) {
+                instancia.getTrocasQueSouCoordenador().get(indice).setSituacaoTroca(3);
+            } else {
+                instancia.getTrocasQueSouCoordenador().get(indice).setSituacaoTroca(6);
+            }
+
         }
 //        if (instancia.getTrocasQueSouCoordenador().get(indice).getIdSolicitante()== idParticipante) {
 //            instancia.getTrocasQueSouCoordenador().get(indice).setSolicitanteAceita(aceito);
@@ -101,30 +108,61 @@ public class RMIServer extends UnicastRemoteObject implements ComunicacaoServer 
     }
 
     @Override
-    public boolean ResponderPropriedadeCartao(int idCartao) throws Exception{
-        
+    public boolean ResponderPropriedadeCartao(int idCartao) throws Exception {
+
         IOCartao iocar = new IOCartao();
-        
+
         Cartao cartao = iocar.RecuperarCartaoPorID(idCartao);
-        
-        if(cartao == null)
-        {
+
+        if (cartao == null) {
             return false;
-        }else
-        {
+        } else {
             return true;
         }
     }
 
     @Override
     public void AdicionaCartao(Cartao cartao) throws Exception {
-        IOCartao iocar = new IOCartao();
-        iocar.SalvaCartao(cartao);
+
+        Colecionador logado = Colecionador.getInstancia();
+
+        while (true) {
+            //Só efetua a transação caso o servidor esteja destrvado
+            if (!logado.isEfetuandoTransacao()) {
+                //Ativa a trava do servidor
+                logado.setEfetuandoTransacao(true);
+
+                IOCartao iocar = new IOCartao();
+                iocar.SalvaCartao(cartao);
+
+                //Desativa a trava do servidor
+                logado.setEfetuandoTransacao(false);
+                break;
+            }
+            sleep(500);
+        }
+
     }
 
     @Override
     public void RetiraCartao(int idCartao) throws Exception {
-        IOCartao iocar = new IOCartao();
-        iocar.ExcluirCartao(idCartao);
+
+        Colecionador logado = Colecionador.getInstancia();
+
+        while (true) {
+            //Só efetua a transação caso o servidor esteja destrvado
+            if (!logado.isEfetuandoTransacao()) {
+                //Ativa a trava do servidor
+                logado.setEfetuandoTransacao(true);
+
+                IOCartao iocar = new IOCartao();
+                iocar.ExcluirCartao(idCartao);
+
+                //Desativa a trava do servidor
+                logado.setEfetuandoTransacao(false);
+                break;
+            }
+            sleep(500);
+        }
     }
 }
