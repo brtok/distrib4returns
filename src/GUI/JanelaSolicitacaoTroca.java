@@ -9,7 +9,6 @@ import Comunicacao.RMIClient;
 import Controle.IOCartao;
 import Modelo.Cartao;
 import Modelo.Colecionador;
-import Modelo.ColecionadorEncontrado;
 import Modelo.Troca;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;

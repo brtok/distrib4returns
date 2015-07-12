@@ -127,5 +127,15 @@ public class Colecionador implements Serializable {
         }
         return resultado;
     }
+    
+    public int getNumeroParticipantesAtivos() {
+        int contador = 0;
+        for (ColecionadorEncontrado ce : listaParticipantes) {
+            if (ce.isAtivo()) {
+                contador++;
+            }
+        }
+        return contador;
+    }
 
 }

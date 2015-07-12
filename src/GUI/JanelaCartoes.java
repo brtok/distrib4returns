@@ -37,7 +37,7 @@ public class JanelaCartoes extends javax.swing.JDialog {
         } else {
             btnNovoCartao.setVisible(false);
         }
-        if (logado.getListaParticipantes().size() < 3) {
+        if (logado.getNumeroParticipantesAtivos() < 3) {
             btnPedirTroca.setVisible(false);
         }
         setModal(true);

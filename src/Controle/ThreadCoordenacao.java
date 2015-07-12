@@ -9,6 +9,8 @@ import Comunicacao.RMIClient;
 import GUI.JanelaPrincipal;
 import Modelo.Colecionador;
 import Modelo.Troca;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -24,54 +26,73 @@ public class ThreadCoordenacao extends Thread {
      */
     @Override
     public void run() {
-        try {
-            logado = Colecionador.getInstancia();
-            RMIClient rmic;
-            boolean posseOk;
-            otimizadorDeTempo = 1000;
+        logado = Colecionador.getInstancia();
+        RMIClient rmic;
+        boolean posseOk;
+        otimizadorDeTempo = 1000;
 
-            while (true) {
-                for (Troca t : logado.getTrocasQueSouCoordenador()) {
-                    //PRIMEIRO TESTE: se alguém caiu, cancelar a transação
-                    if ((!(logado.getUsuarioParticipantePorId(t.getIdSolicitado()).isAtivo()))
-                            || (!(logado.getUsuarioParticipantePorId(t.getIdSolicitante()).isAtivo()))) {
-                        t.setSituacaoTroca(7);
-                        if (logado.getUsuarioParticipantePorId(t.getIdSolicitado()).isAtivo()) {
+        while (true) {
+            for (int i = 0; i < logado.getTrocasQueSouCoordenador().size(); i++) {
+
+                Troca t = logado.getTrocasQueSouCoordenador().get(i);
+                //PRIMEIRO TESTE: se alguém caiu, cancelar a transação
+                if ((!(logado.getUsuarioParticipantePorId(t.getIdSolicitado()).isAtivo()))
+                        || (!(logado.getUsuarioParticipantePorId(t.getIdSolicitante()).isAtivo()))) {
+                    t.setSituacaoTroca(7);
+                    if (logado.getUsuarioParticipantePorId(t.getIdSolicitado()).isAtivo()) {
+                        try {
                             AtualizarSolicitado(t);
-                        }
-                        if (logado.getUsuarioParticipantePorId(t.getIdSolicitante()).isAtivo()) {
-                            AtualizarSolicitante(t);
+                        } catch (Exception ex) {
+                            Logger.getLogger(ThreadCoordenacao.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-
-                    //TESTES por situação
-                    switch (t.getSituacaoTroca()) {
-                        //Status 1: Enviado para coordenador
-                        //Repassa para o Solicitado
-                        case 1:
-                            t.setSituacaoTroca(2);
-                            rmic = new RMIClient(t.getIdSolicitado());
-                            rmic.EnviaPropostaParaParticipante(t);
+                    if (logado.getUsuarioParticipantePorId(t.getIdSolicitante()).isAtivo()) {
+                        try {
                             AtualizarSolicitante(t);
-                            break;
+                        } catch (Exception ex) {
+                            Logger.getLogger(ThreadCoordenacao.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
 
-                        //Status 2: Aguardando Resposta
-                        //Testa apenas se o solicitante não cancelou a transação
-                        case 2:
+                //TESTES por situação
+                switch (t.getSituacaoTroca()) {
+                    //Status 1: Enviado para coordenador
+                    //Repassa para o Solicitado
+                    case 1:
+                        t.setSituacaoTroca(2);
+                         {
+                            try {
+                                rmic = new RMIClient(t.getIdSolicitado());
+                                rmic.EnviaPropostaParaParticipante(t);
+                                AtualizarSolicitante(t);
+                            } catch (Exception ex) {
+                                Logger.getLogger(ThreadCoordenacao.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                        break;
+
+                    //Status 2: Aguardando Resposta
+                    //Testa apenas se o solicitante não cancelou a transação
+                    case 2: {
+                        try {
                             //Verifica se os participantes da troca ainda tem posse das cartas
                             posseOk = VerificaPosseCartasFase1(t);
-
                             //Se um dos particpantes cancelou a transação ou
                             //Se ao menos um dos participantes não tiver mais a posse da carta, a troca é abortada
                             if (!(t.isSolicitanteAceita()) || (!posseOk)) {
                                 t.setSituacaoTroca(7);
                                 AtualizarOsDois(t);
                             }
-                            break;
+                        } catch (Exception e) {
+                        }
+                    }
+                    break;
 
-                        //Status 3: Já Respondeu
-                        //Se o solicitado aceitou, inicia o segundo passo da verificação
-                        case 3:
+                    //Status 3: Já Respondeu
+                    //Se o solicitado aceitou, inicia o segundo passo da verificação
+                    case 3:
+                        try {
                             //Verifica se os participantes da troca ainda tem posse das cartas
                             posseOk = VerificaPosseCartasFase1(t);
 
@@ -84,10 +105,14 @@ public class ThreadCoordenacao extends Thread {
                                 t.setSituacaoTroca(6);
                             }
                             AtualizarOsDois(t);
-                            break;
+                        } catch (Exception ex) {
+                            Logger.getLogger(ThreadCoordenacao.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        break;
 
-                        //Status 4: Fez a troca, verificar se foi feita mesmo
-                        case 4:
+                    //Status 4: Fez a troca, verificar se foi feita mesmo
+                    case 4:
+                        try {
                             //Verifica se a troca foi realmente feita
                             posseOk = VerificaPosseCartasFase2(t);
 
@@ -99,27 +124,43 @@ public class ThreadCoordenacao extends Thread {
                             }
                             otimizadorDeTempo = 1000;
                             AtualizarOsDois(t);
-                            break;
-                    }
-                    sleep(otimizadorDeTempo);
+                        } catch (Exception ex) {
+                            Logger.getLogger(ThreadCoordenacao.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        break;
                 }
-
-                sleep(2*otimizadorDeTempo);
-
-                //TESTE COM AS TRANSAÇÕES PARTICIPANTES
-                //se o coordenador caiu, cancelar a própria transação
-                for (int i = 0; i < logado.getTrocasQueSouParticipante().size(); i++) {
-                    if (!(logado.getUsuarioParticipantePorId(logado.getTrocasQueSouParticipante().get(i).getIdCoordenador()).isAtivo())) {
-                        logado.getTrocasQueSouParticipante().get(i).setSituacaoTroca(7);
-                        JanelaPrincipal.atualizarTabelaTransacoes();
-                    }
+                try {
                     sleep(otimizadorDeTempo);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ThreadCoordenacao.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
-                sleep(2*otimizadorDeTempo);
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+
+            try {
+                sleep(2 * otimizadorDeTempo);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ThreadCoordenacao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            //TESTE COM AS TRANSAÇÕES PARTICIPANTES
+            //se o coordenador caiu, cancelar a própria transação
+            for (int i = 0; i < logado.getTrocasQueSouParticipante().size(); i++) {
+                if (!(logado.getUsuarioParticipantePorId(logado.getTrocasQueSouParticipante().get(i).getIdCoordenador()).isAtivo())) {
+                    logado.getTrocasQueSouParticipante().get(i).setSituacaoTroca(7);
+                    JanelaPrincipal.atualizarTabelaTransacoes();
+                }
+                try {
+                    sleep(otimizadorDeTempo);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ThreadCoordenacao.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            try {
+                sleep(2 * otimizadorDeTempo);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ThreadCoordenacao.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -187,7 +228,7 @@ public class ThreadCoordenacao extends Thread {
         //Se os dois tiverem o cartão, efetua a troca
         return (solicitanteTemCartao && solicitadoTemCartao);
     }
-    
+
     public boolean todosAceitam(Troca troca) {
         return (troca.isSolicitanteAceita() && troca.isSolicitadoAceita());
     }
