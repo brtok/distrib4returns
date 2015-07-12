@@ -76,7 +76,7 @@ public class ThreadCoordenacao extends Thread {
                             posseOk = VerificaPosseCartasFase1(t);
 
                             //Se os dois tiverem o cartão, efetua a troca
-                            if (posseOk) {
+                            if (posseOk && todosAceitam(t)) {
                                 EfetuarTroca(t);
                                 t.setSituacaoTroca(4);
                                 otimizadorDeTempo = 10;
@@ -186,6 +186,10 @@ public class ThreadCoordenacao extends Thread {
         //System.out.println("Solicitado tem cartão " + solicitadoTemCartao);
         //Se os dois tiverem o cartão, efetua a troca
         return (solicitanteTemCartao && solicitadoTemCartao);
+    }
+    
+    public boolean todosAceitam(Troca troca) {
+        return (troca.isSolicitanteAceita() && troca.isSolicitadoAceita());
     }
 
 }
