@@ -107,6 +107,9 @@ public class JanelaPrincipal extends javax.swing.JFrame {
                 case 6:
                     tabela[i][3] = "Recusada";
                     break;
+                case 7:
+                    tabela[i][3] = "Cancelada";
+                    break;
                 default:
                     JOptionPane.showMessageDialog(null, "Erro");
                     System.exit(0);

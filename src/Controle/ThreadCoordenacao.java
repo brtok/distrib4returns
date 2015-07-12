@@ -27,13 +27,13 @@ public class ThreadCoordenacao extends Thread {
             logado = Colecionador.getInstancia();
             RMIClient rmic;
             boolean posseOk;
-                    
+
             while (true) {
                 for (Troca t : logado.getTrocasQueSouCoordenador()) {
                     //PRIMEIRO TESTE: se alguém caiu, cancelar a transação
                     if ((!(logado.getUsuarioParticipantePorId(t.getIdSolicitado()).isAtivo()))
                             || (!(logado.getUsuarioParticipantePorId(t.getIdSolicitante()).isAtivo()))) {
-                        t.setSituacaoTroca(6);
+                        t.setSituacaoTroca(7);
                         if (logado.getUsuarioParticipantePorId(t.getIdSolicitado()).isAtivo()) {
                             AtualizarSolicitado(t);
                         }
@@ -52,66 +52,67 @@ public class ThreadCoordenacao extends Thread {
                             rmic.EnviaPropostaParaParticipante(t);
                             AtualizarSolicitante(t);
                             break;
+
                         //Status 2: Aguardando Resposta
                         //Testa apenas se o solicitante não cancelou a transação
                         case 2:
-                            
                             //Verifica se os participantes da troca ainda tem posse das cartas
-                            posseOk = VerificaPosseCartas(t);
-                            
+                            posseOk = VerificaPosseCartasFase1(t);
+
                             //Se um dos particpantes cancelou a transação ou
                             //Se ao menos um dos participantes não tiver mais a posse da carta, a troca é abortada
                             if (!(t.isSolicitanteAceita()) || (!posseOk)) {
-                                t.setSituacaoTroca(6);
-                                AtualizarSolicitado(t);
-                                AtualizarSolicitante(t);
+                                t.setSituacaoTroca(7);
+                                AtualizarOsDois(t);
                             }
-
                             break;
+                            
+                        //Status 3: Já Respondeu
                         //Se o solicitado aceitou, inicia o segundo passo da verificação
                         case 3:
-                            System.out.println("Troca aceita");
-                            t.setSituacaoTroca(3);
-                            AtualizarSolicitado(t);
-                            AtualizarSolicitante(t);
-
                             //Verifica se os participantes da troca ainda tem posse das cartas
-                            posseOk = VerificaPosseCartas(t);
+                            posseOk = VerificaPosseCartasFase1(t);
 
                             //Se os dois tiverem o cartão, efetua a troca
                             if (posseOk) {
                                 EfetuarTroca(t);
-                                t.setSituacaoTroca(5);
+                                t.setSituacaoTroca(4);
                             } else {
                                 t.setSituacaoTroca(6);
                             }
-
-                            AtualizarSolicitado(t);
-                            AtualizarSolicitante(t);
+                            AtualizarOsDois(t);
                             break;
-                        case 6:
                             
-                            AtualizarSolicitado(t);
-                            AtualizarSolicitante(t);
+                        //Status 4: Fez a troca, verificar se foi feita mesmo
+                        case 4:
+                            //Verifica se a troca foi realmente feita
+                            posseOk = VerificaPosseCartasFase2(t);
 
+                            //Se os dois tiverem o cartão agora trocados, finaliza a operação
+                            if (posseOk) {
+                                t.setSituacaoTroca(5);
+                            } else {
+                                t.setSituacaoTroca(7);
+                            }
+                            AtualizarOsDois(t);
                             break;
                     }
                     sleep(500);
                 }
 
-                sleep(2500);
+                sleep(1500);
 
                 //TESTE COM AS TRANSAÇÕES PARTICIPANTES
                 //se o coordenador caiu, cancelar a própria transação
                 for (Troca t : logado.getTrocasQueSouParticipante()) {
                     if (!(logado.getUsuarioParticipantePorId(t.getIdCoordenador()).isAtivo())) {
-                        t.setSituacaoTroca(6);
+                        t.setSituacaoTroca(7);
                         JanelaPrincipal.atualizarTabelaTransacoes();
                     }
                     sleep(500);
                 }
 
-                sleep(2500);
+                sleep(1500);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -128,6 +129,11 @@ public class ThreadCoordenacao extends Thread {
         RMIClient rmic = new RMIClient(troca.getIdSolicitado());
         rmic.EnviarAtualizacaoTroca(troca.getId(), troca.getSituacaoTroca(), troca.isSolicitadoAceita(), troca.isSolicitadoAceita());
         System.out.println("Atualizou o solicitado " + troca.getIdSolicitado());
+    }
+
+    public void AtualizarOsDois(Troca troca) throws Exception {
+        AtualizarSolicitado(troca);
+        AtualizarSolicitante(troca);
     }
 
     public void EfetuarTroca(Troca troca) throws Exception {
@@ -148,26 +154,34 @@ public class ThreadCoordenacao extends Thread {
 
     }
 
-    public boolean VerificaPosseCartas(Troca troca) throws Exception{
-        
+    public boolean VerificaPosseCartasFase1(Troca troca) throws Exception {
         RMIClient rmic;
-        
         //Verificar se o solicitante ainda possui o cartão
         rmic = new RMIClient(troca.getIdSolicitante());
         boolean solicitanteTemCartao = rmic.VerificaPropriedadeCartao(troca.getCartaoManda().getIdCartao());
-        System.out.println("Solicitante tem cartao " + solicitanteTemCartao);
+        //System.out.println("Solicitante tem cartao " + solicitanteTemCartao);
 
         //Verifica se o solicitado ainda possui o cartão
         rmic = new RMIClient(troca.getIdSolicitado());
         boolean solicitadoTemCartao = rmic.VerificaPropriedadeCartao(troca.getCartaoRecebe().getIdCartao());
-        System.out.println("Solicitado tem cartão " + solicitadoTemCartao);
-
+        //System.out.println("Solicitado tem cartão " + solicitadoTemCartao);
         //Se os dois tiverem o cartão, efetua a troca
-        if (solicitanteTemCartao && solicitadoTemCartao) {
-            return true;
-        } else {
-            return false;
-        }
+        return (solicitanteTemCartao && solicitadoTemCartao);
+    }
+
+    public boolean VerificaPosseCartasFase2(Troca troca) throws Exception {
+        RMIClient rmic;
+        //Verificar se o solicitante ainda possui o cartão
+        rmic = new RMIClient(troca.getIdSolicitante());
+        boolean solicitanteTemCartao = rmic.VerificaPropriedadeCartao(troca.getCartaoRecebe().getIdCartao());
+        //System.out.println("Solicitante tem cartao " + solicitanteTemCartao);
+
+        //Verifica se o solicitado ainda possui o cartão
+        rmic = new RMIClient(troca.getIdSolicitado());
+        boolean solicitadoTemCartao = rmic.VerificaPropriedadeCartao(troca.getCartaoManda().getIdCartao());
+        //System.out.println("Solicitado tem cartão " + solicitadoTemCartao);
+        //Se os dois tiverem o cartão, efetua a troca
+        return (solicitanteTemCartao && solicitadoTemCartao);
     }
 
 }

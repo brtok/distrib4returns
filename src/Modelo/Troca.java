@@ -26,6 +26,7 @@ public class Troca implements Serializable{
     //4: Fazer a Troca
     //5: Efetuada
     //6: Recusada
+    //7: Cancelada
     private int situacaoTroca;
 
     //Decisões

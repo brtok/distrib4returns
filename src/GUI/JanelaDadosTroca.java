@@ -86,7 +86,13 @@ public class JanelaDadosTroca extends javax.swing.JDialog {
                 break;
             case 6:
                 labelStatus.setForeground(new java.awt.Color(204, 0, 0));
-                labelStatus.setText("6-Cancelada/Recusada");
+                labelStatus.setText("6-Recusada");
+                botaoAceitar.setVisible(false);
+                botaoRejeitar.setVisible(false);
+                break;
+            case 7:
+                labelStatus.setForeground(new java.awt.Color(204, 0, 0));
+                labelStatus.setText("7-Cancelada");
                 botaoAceitar.setVisible(false);
                 botaoRejeitar.setVisible(false);
                 break;
