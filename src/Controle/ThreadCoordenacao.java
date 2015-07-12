@@ -38,19 +38,22 @@ public class ThreadCoordenacao extends Thread {
                 //PRIMEIRO TESTE: se alguém caiu, cancelar a transação
                 if ((!(logado.getUsuarioParticipantePorId(t.getIdSolicitado()).isAtivo()))
                         || (!(logado.getUsuarioParticipantePorId(t.getIdSolicitante()).isAtivo()))) {
-                    t.setSituacaoTroca(7);
-                    if (logado.getUsuarioParticipantePorId(t.getIdSolicitado()).isAtivo()) {
-                        try {
-                            AtualizarSolicitado(t);
-                        } catch (Exception ex) {
-                            Logger.getLogger(ThreadCoordenacao.class.getName()).log(Level.SEVERE, null, ex);
+                    if (t.getSituacaoTroca() == 1 || t.getSituacaoTroca() == 2
+                            || t.getSituacaoTroca() == 3 || t.getSituacaoTroca() == 4) {
+                        t.setSituacaoTroca(7);
+                        if (logado.getUsuarioParticipantePorId(t.getIdSolicitado()).isAtivo()) {
+                            try {
+                                AtualizarSolicitado(t);
+                            } catch (Exception ex) {
+                                Logger.getLogger(ThreadCoordenacao.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
-                    }
-                    if (logado.getUsuarioParticipantePorId(t.getIdSolicitante()).isAtivo()) {
-                        try {
-                            AtualizarSolicitante(t);
-                        } catch (Exception ex) {
-                            Logger.getLogger(ThreadCoordenacao.class.getName()).log(Level.SEVERE, null, ex);
+                        if (logado.getUsuarioParticipantePorId(t.getIdSolicitante()).isAtivo()) {
+                            try {
+                                AtualizarSolicitante(t);
+                            } catch (Exception ex) {
+                                Logger.getLogger(ThreadCoordenacao.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
                     }
                 }
