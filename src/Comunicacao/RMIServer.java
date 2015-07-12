@@ -93,18 +93,17 @@ public class RMIServer extends UnicastRemoteObject implements ComunicacaoServer 
             }
         }
         if (instancia.getTrocasQueSouCoordenador().get(indice).getIdSolicitado() == idParticipante) {
-
             instancia.getTrocasQueSouCoordenador().get(indice).setSolicitadoAceita(aceito);
             if (aceito) {
                 instancia.getTrocasQueSouCoordenador().get(indice).setSituacaoTroca(3);
             } else {
                 instancia.getTrocasQueSouCoordenador().get(indice).setSituacaoTroca(6);
             }
-
         }
-//        if (instancia.getTrocasQueSouCoordenador().get(indice).getIdSolicitante()== idParticipante) {
-//            instancia.getTrocasQueSouCoordenador().get(indice).setSolicitanteAceita(aceito);
-//        }
+        
+        if (instancia.getTrocasQueSouCoordenador().get(indice).getIdSolicitante() == idParticipante) {
+            instancia.getTrocasQueSouCoordenador().get(indice).setSolicitanteAceita(aceito);
+        }
     }
 
     @Override

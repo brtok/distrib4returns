@@ -17,6 +17,7 @@ import Modelo.Troca;
 public class ThreadCoordenacao extends Thread {
 
     private Colecionador logado;
+    private int otimizadorDeTempo;
 
     /**
      *
@@ -27,6 +28,7 @@ public class ThreadCoordenacao extends Thread {
             logado = Colecionador.getInstancia();
             RMIClient rmic;
             boolean posseOk;
+            otimizadorDeTempo = 1000;
 
             while (true) {
                 for (Troca t : logado.getTrocasQueSouCoordenador()) {
@@ -66,7 +68,7 @@ public class ThreadCoordenacao extends Thread {
                                 AtualizarOsDois(t);
                             }
                             break;
-                            
+
                         //Status 3: Já Respondeu
                         //Se o solicitado aceitou, inicia o segundo passo da verificação
                         case 3:
@@ -77,12 +79,13 @@ public class ThreadCoordenacao extends Thread {
                             if (posseOk) {
                                 EfetuarTroca(t);
                                 t.setSituacaoTroca(4);
+                                otimizadorDeTempo = 10;
                             } else {
                                 t.setSituacaoTroca(6);
                             }
                             AtualizarOsDois(t);
                             break;
-                            
+
                         //Status 4: Fez a troca, verificar se foi feita mesmo
                         case 4:
                             //Verifica se a troca foi realmente feita
@@ -94,25 +97,26 @@ public class ThreadCoordenacao extends Thread {
                             } else {
                                 t.setSituacaoTroca(7);
                             }
+                            otimizadorDeTempo = 1000;
                             AtualizarOsDois(t);
                             break;
                     }
-                    sleep(500);
+                    sleep(otimizadorDeTempo);
                 }
 
-                sleep(1500);
+                sleep(2*otimizadorDeTempo);
 
                 //TESTE COM AS TRANSAÇÕES PARTICIPANTES
                 //se o coordenador caiu, cancelar a própria transação
-                for (Troca t : logado.getTrocasQueSouParticipante()) {
-                    if (!(logado.getUsuarioParticipantePorId(t.getIdCoordenador()).isAtivo())) {
-                        t.setSituacaoTroca(7);
+                for (int i = 0; i < logado.getTrocasQueSouParticipante().size(); i++) {
+                    if (!(logado.getUsuarioParticipantePorId(logado.getTrocasQueSouParticipante().get(i).getIdCoordenador()).isAtivo())) {
+                        logado.getTrocasQueSouParticipante().get(i).setSituacaoTroca(7);
                         JanelaPrincipal.atualizarTabelaTransacoes();
                     }
-                    sleep(500);
+                    sleep(otimizadorDeTempo);
                 }
 
-                sleep(1500);
+                sleep(2*otimizadorDeTempo);
             }
         } catch (Exception ex) {
             ex.printStackTrace();

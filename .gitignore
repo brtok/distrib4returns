@@ -44,3 +44,4 @@ Temporary Items
 *.properties
 /build/
 *.properties
+/dist/
