@@ -149,8 +149,13 @@ public class ThreadCoordenacao extends Thread {
             //se o coordenador caiu, cancelar a própria transação
             for (int i = 0; i < logado.getTrocasQueSouParticipante().size(); i++) {
                 if (!(logado.getUsuarioParticipantePorId(logado.getTrocasQueSouParticipante().get(i).getIdCoordenador()).isAtivo())) {
-                    logado.getTrocasQueSouParticipante().get(i).setSituacaoTroca(7);
-                    JanelaPrincipal.atualizarTabelaTransacoes();
+                    if (logado.getTrocasQueSouParticipante().get(i).getSituacaoTroca() == 1
+                            || logado.getTrocasQueSouParticipante().get(i).getSituacaoTroca() == 2
+                            || logado.getTrocasQueSouParticipante().get(i).getSituacaoTroca() == 3
+                            || logado.getTrocasQueSouParticipante().get(i).getSituacaoTroca() == 4) {
+                        logado.getTrocasQueSouParticipante().get(i).setSituacaoTroca(7);
+                        JanelaPrincipal.atualizarTabelaTransacoes();
+                    }
                 }
                 try {
                     sleep(otimizadorDeTempo);
