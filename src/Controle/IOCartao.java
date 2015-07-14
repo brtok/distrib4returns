@@ -16,11 +16,17 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
- *
- * @author Bruno
+ * Leitura e escrita de cartões em arquivo
+ * @author Bruno Tokarski e Rafael Vidal
  */
 public class IOCartao {
 
+    /**
+     * Salva o cartão em arquivo
+     * @param cartao
+     * @return
+     * @throws Exception 
+     */
     public boolean SalvaCartao(Cartao cartao) throws Exception {
         ArrayList<Cartao> cartoes;
         boolean duplicado = false;
@@ -59,6 +65,11 @@ public class IOCartao {
         }
     }
 
+    /**
+     * Edita um cartão salvo
+     * @param cartao
+     * @throws Exception 
+     */
     public void EditaCartao(Cartao cartao) throws Exception {
         ArrayList<Cartao> cartoes;
         Colecionador logado = Colecionador.getInstancia();
@@ -89,6 +100,11 @@ public class IOCartao {
         JOptionPane.showMessageDialog(null, "Cartão ID " + cartao.getIdCartao() + " modificado com sucesso.");
     }
 
+    /**
+     * Recupera todos os cartões salvos
+     * @return lista de cartões do usuário
+     * @throws Exception 
+     */
     public ArrayList<Cartao> RecuperarCartoes() throws Exception {
         ArrayList<Cartao> cartoes = new ArrayList<>();
         Colecionador logado = Colecionador.getInstancia();
@@ -104,6 +120,12 @@ public class IOCartao {
         return cartoes;
     }
 
+    /**
+     * Retorna um cartão a partir de seu id
+     * @param id
+     * @return cartão com o id recebido como parâmetro
+     * @throws Exception 
+     */
     public Cartao RecuperarCartaoPorID(int id) throws Exception {
         ArrayList<Cartao> cartoes = new ArrayList<>();
         Colecionador logado = Colecionador.getInstancia();
@@ -123,6 +145,11 @@ public class IOCartao {
         }
     }
 
+    /**
+     * Exclui um cartão da coleção do usuário
+     * @param idCartao
+     * @throws Exception 
+     */
     public void ExcluirCartao(int idCartao) throws Exception {
         
         ArrayList<Cartao> cartoes = null;

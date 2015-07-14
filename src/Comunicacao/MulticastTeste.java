@@ -7,13 +7,12 @@ package Comunicacao;
 
 import Modelo.Colecionador;
 import Modelo.ColecionadorEncontrado;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author Bruno
+ * Certificação de usuários online
+ * @author Bruno Tokarski e Rafael Vidal
  */
 public class MulticastTeste extends Thread {
 

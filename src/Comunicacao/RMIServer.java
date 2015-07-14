@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 /**
  * Métodos acessíveis aos outros colecionadores via RMI
  *
- * @author Rafael
+ * @author Bruno Tokarski e Rafael Vidal
  */
 public class RMIServer extends UnicastRemoteObject implements ComunicacaoServer {
 
@@ -44,12 +44,22 @@ public class RMIServer extends UnicastRemoteObject implements ComunicacaoServer 
         System.out.println("RMIServer criado e registrado");
     }
 
+    /**
+     * Receber a proposta de troca como coordenar
+     * @param troca
+     * @throws InterruptedException 
+     */
     @Override
     public void ReceberPropostaComoCoordenador(Troca troca) throws InterruptedException {
         Colecionador logado = Colecionador.getInstancia();
         logado.getTrocasQueSouCoordenador().add(troca);
     }
 
+    /**
+     * Receber a proposta de troca como participante
+     * @param troca
+     * @throws InterruptedException 
+     */
     @Override
     public void ReceberPropostaComoParticipante(Troca troca) throws InterruptedException {
         Colecionador instancia = Colecionador.getInstancia();
@@ -57,6 +67,10 @@ public class RMIServer extends UnicastRemoteObject implements ComunicacaoServer 
         JanelaPrincipal.atualizarTabelaTransacoes();
     }
 
+    /**
+     * Retorna a lista de cartões do usuário
+     * @return Lista de cartões do usuário
+     */
     @Override
     public ArrayList<Cartao> ListarCartoes() {
         try {
@@ -68,6 +82,14 @@ public class RMIServer extends UnicastRemoteObject implements ComunicacaoServer 
         return null;
     }
 
+    /**
+     * Atualiza a situação de troca em que o usuário é participante
+     * @param idTroca
+     * @param situacaoTroca
+     * @param solicitanteAceita
+     * @param solicitadoAceita
+     * @throws Exception 
+     */
     @Override
     public void AtualizarTroca(String idTroca, int situacaoTroca, boolean solicitanteAceita, boolean solicitadoAceita) throws Exception {
         Colecionador instancia = Colecionador.getInstancia();
@@ -83,6 +105,13 @@ public class RMIServer extends UnicastRemoteObject implements ComunicacaoServer 
         JanelaPrincipal.atualizarTabelaTransacoes();
     }
 
+    /**
+     * Recebe proposta de troca
+     * @param idTroca
+     * @param idParticipante
+     * @param aceito
+     * @throws Exception 
+     */
     @Override
     public void ReceberRespostaTroca(String idTroca, int idParticipante, boolean aceito) throws Exception {
         Colecionador instancia = Colecionador.getInstancia();
@@ -102,6 +131,12 @@ public class RMIServer extends UnicastRemoteObject implements ComunicacaoServer 
         }
     }
 
+    /**
+     * Responde se o usuário possui a propriedade de cartão envolvido na troca
+     * @param idCartao
+     * @return possui o cartão (sim ou não)
+     * @throws Exception 
+     */
     @Override
     public boolean ResponderPropriedadeCartao(int idCartao) throws Exception {
 
@@ -116,6 +151,11 @@ public class RMIServer extends UnicastRemoteObject implements ComunicacaoServer 
         }
     }
 
+    /**
+     * Adiciona um cartão na coleção do usuário
+     * @param cartao
+     * @throws Exception 
+     */
     @Override
     public void AdicionaCartao(Cartao cartao) throws Exception {
 
@@ -139,6 +179,11 @@ public class RMIServer extends UnicastRemoteObject implements ComunicacaoServer 
 
     }
 
+    /**
+     * Retira um cartão da coleção do usuário
+     * @param idCartao
+     * @throws Exception 
+     */
     @Override
     public void RetiraCartao(int idCartao) throws Exception {
 

@@ -9,8 +9,8 @@ import GUI.JanelaInicial;
 import javax.swing.UIManager;
 
 /**
- *
- * @author Rafael
+ * Classe inicial do programa
+ * @author Bruno Tokarski e Rafael Vidal
  */
 public class Distrib4 {
 

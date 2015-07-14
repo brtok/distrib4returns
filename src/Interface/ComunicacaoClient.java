@@ -11,7 +11,7 @@ import java.rmi.Remote;
 
 /**
  * Interface de envio de ações para outros participantes
- * @author Rafael
+ * @author Bruno Tokarski e Rafael Vidal
  */
 public interface ComunicacaoClient extends Remote {
    

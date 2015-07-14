@@ -13,8 +13,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author Bruno
+ * Thread com atividades de coordenação
+ * @author Bruno Tokarski e Rafael Vidal
  */
 public class ThreadCoordenacao extends Thread {
 
@@ -22,7 +22,7 @@ public class ThreadCoordenacao extends Thread {
     private int otimizadorDeTempo;
 
     /**
-     *
+     * Thread com as tarefas do coordenador
      */
     @Override
     public void run() {
@@ -172,23 +172,43 @@ public class ThreadCoordenacao extends Thread {
         }
     }
 
+    /**
+     * Atualizar o solicitante com informações da troca
+     * @param troca
+     * @throws Exception 
+     */
     public void AtualizarSolicitante(Troca troca) throws Exception {
         RMIClient rmic = new RMIClient(troca.getIdSolicitante());
         rmic.EnviarAtualizacaoTroca(troca.getId(), troca.getSituacaoTroca(), troca.isSolicitadoAceita(), troca.isSolicitadoAceita());
         System.out.println("Atualizou o solcitante " + troca.getIdSolicitante());
     }
 
+    /**
+     * Atualizar o solicitado com informaçõe da troca
+     * @param troca
+     * @throws Exception 
+     */
     public void AtualizarSolicitado(Troca troca) throws Exception {
         RMIClient rmic = new RMIClient(troca.getIdSolicitado());
         rmic.EnviarAtualizacaoTroca(troca.getId(), troca.getSituacaoTroca(), troca.isSolicitadoAceita(), troca.isSolicitadoAceita());
         System.out.println("Atualizou o solicitado " + troca.getIdSolicitado());
     }
 
+    /**
+     * Atualizar solicitante e solicitado com informações da troca
+     * @param troca
+     * @throws Exception 
+     */
     public void AtualizarOsDois(Troca troca) throws Exception {
         AtualizarSolicitado(troca);
         AtualizarSolicitante(troca);
     }
 
+    /**
+     * Efetuar a troca
+     * @param troca
+     * @throws Exception 
+     */
     public void EfetuarTroca(Troca troca) throws Exception {
         RMIClient rmiSolicitante = new RMIClient(troca.getIdSolicitante());
         RMIClient rmiSolicitado = new RMIClient(troca.getIdSolicitado());
@@ -207,6 +227,12 @@ public class ThreadCoordenacao extends Thread {
 
     }
 
+    /**
+     * Verificar posse de cartões na 1ª fase de troca
+     * @param troca
+     * @return
+     * @throws Exception 
+     */
     public boolean VerificaPosseCartasFase1(Troca troca) throws Exception {
         RMIClient rmic;
         //Verificar se o solicitante ainda possui o cartão
@@ -222,6 +248,12 @@ public class ThreadCoordenacao extends Thread {
         return (solicitanteTemCartao && solicitadoTemCartao);
     }
 
+    /**
+     * Verificar posse de cartões na 2ª fase da troca
+     * @param troca
+     * @return
+     * @throws Exception 
+     */
     public boolean VerificaPosseCartasFase2(Troca troca) throws Exception {
         RMIClient rmic;
         //Verificar se o solicitante ainda possui o cartão
@@ -237,6 +269,11 @@ public class ThreadCoordenacao extends Thread {
         return (solicitanteTemCartao && solicitadoTemCartao);
     }
 
+    /**
+     * Verificar se todos os envolvidos na troca a aceitaram
+     * @param troca
+     * @return todos aceitaram (sim ou não)
+     */
     public boolean todosAceitam(Troca troca) {
         return (troca.isSolicitanteAceita() && troca.isSolicitadoAceita());
     }

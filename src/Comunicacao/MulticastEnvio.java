@@ -13,8 +13,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author Bruno
+ * Envio de mensagens via multicast
+ * @author Bruno Tokarski e Rafael Vidal
  */
 public class MulticastEnvio extends Thread {
 
@@ -32,7 +32,6 @@ public class MulticastEnvio extends Thread {
                 String mensagem = instancia.getIdColecionador() + "#" + instancia.getPorta() + "#" + instancia.getNomeColecionador() + "#" + instancia.getCartoes().size();
                 DatagramPacket msgPacket = new DatagramPacket(mensagem.getBytes(), mensagem.getBytes().length, address, 8885);
                 serverSocket.send(msgPacket);
-//                System.out.println("Mandou: " + mensagem);
                 sleep(10000);
             }
         } catch (Exception ex) {

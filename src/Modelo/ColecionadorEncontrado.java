@@ -8,8 +8,8 @@ package Modelo;
 import java.io.Serializable;
 
 /**
- *
- * @author Bruno
+ * Classe de modelo da entidade colecionador participante
+ * @author Bruno Tokarski e Rafael Vidal
  */
 public class ColecionadorEncontrado implements Serializable {
     

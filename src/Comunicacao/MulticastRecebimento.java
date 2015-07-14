@@ -16,11 +16,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author Bruno
+ * Recebimento de mensagens via multicast
+ * @author Bruno Tokarski e Rafael Vidal
  */
 public class MulticastRecebimento extends Thread {
 
+    /**
+     * Thread de envio de mensagens via multicast
+     */
     @Override
     public void run() {
         try {

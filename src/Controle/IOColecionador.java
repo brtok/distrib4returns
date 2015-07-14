@@ -15,13 +15,19 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
- *
- * @author Bruno
+ * Leitura e escrita em arquivo do colecionador
+ * @author Bruno Tokarski e Rafael Vidal
  */
 public class IOColecionador {
 
     ArrayList<Colecionador> colecionadores;
 
+    /**
+     * Salva um novo colecionador
+     * @param colecionador
+     * @return
+     * @throws Exception 
+     */
     public boolean SalvaColecionador(Colecionador colecionador) throws Exception {
         boolean duplicado = false;
         File arquivo = new File("C:/Distrib4/Colecionadores.dst");
@@ -54,6 +60,12 @@ public class IOColecionador {
         }
     }
 
+    /**
+     * Recupera informação de um determinado colecionador a partir de seu id
+     * @param id
+     * @return colecionador com o id informado
+     * @throws Exception 
+     */
     public Colecionador RecuperaColecionadorPorID(int id) throws Exception {
         File arquivo = new File("C:/Distrib4/Colecionadores.dst");
         Colecionador colecionador = null;
@@ -72,6 +84,11 @@ public class IOColecionador {
         return colecionador;
     }
 
+    /**
+     * Recupera todos os colecionadores cadastrados
+     * @return lista com todos os colecionadores cadastrados
+     * @throws Exception 
+     */
     public ArrayList<Colecionador> RecuperarColecionadores() throws Exception {
         File arquivo = new File("C:/Distrib4/Colecionadores.dst");
         if (arquivo.exists()) {
@@ -84,6 +101,11 @@ public class IOColecionador {
         return colecionadores;
     }
 
+    /**
+     * Excluir um colecionador
+     * @param idColecionador
+     * @throws Exception 
+     */    
     public void RemoverColecionador(int idColecionador) throws Exception {
         File arquivo = new File("C:/Distrib4/Colecionadores.dst");
         if (arquivo.exists()) {

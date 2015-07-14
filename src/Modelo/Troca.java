@@ -8,8 +8,8 @@ package Modelo;
 import java.io.Serializable;
 
 /**
- *
- * @author Rafael
+ * Classe de modelo da entidade Troca
+ * @author Bruno Tokarski e Rafael Vidal
  */
 public class Troca implements Serializable{
     

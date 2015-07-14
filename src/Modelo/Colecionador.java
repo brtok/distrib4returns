@@ -9,8 +9,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- *
- * @author Rafael
+ * Classe de modelo da entidade colecionador
+ * @author Bruno Tokarski e Rafael Vidal
  */
 public class Colecionador implements Serializable {
 
