@@ -3,22 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Rafael/Documents/GitHub/distrib4returns/src/Comunicacao/RMIClient.java</file>
-            <file>file:/C:/Users/Rafael/Documents/GitHub/distrib4returns/src/distrib4/Distrib4.java</file>
+            <file>file:/C:/Users/Rafael/Documents/GitHub/distrib4returns/src/GUI/JanelaPrincipal.java</file>
             <file>file:/C:/Users/Rafael/Documents/GitHub/distrib4returns/src/Comunicacao/RMIServer.java</file>
-            <file>file:/C:/Users/Rafael/Documents/GitHub/distrib4returns/src/Modelo/Colecionador.java</file>
-            <file>file:/C:/Users/Rafael/Documents/GitHub/distrib4returns/src/Modelo/Cartao.java</file>
-            <file>file:/C:/Users/Rafael/Documents/GitHub/distrib4returns/src/GUI/JanelaCadastroCartao.java</file>
-            <file>file:/C:/Users/Rafael/Documents/GitHub/distrib4returns/src/Modelo/ColecionadorEncontrado.java</file>
-            <file>file:/C:/Users/Rafael/Documents/GitHub/distrib4returns/src/Controle/IOCartao.java</file>
-            <file>file:/C:/Users/Rafael/Documents/GitHub/distrib4returns/src/Modelo/Troca.java</file>
             <file>file:/C:/Users/Rafael/Documents/GitHub/distrib4returns/src/Controle/ThreadCoordenacao.java</file>
-            <file>file:/C:/Users/Rafael/Documents/GitHub/distrib4returns/src/Comunicacao/MulticastRecebimento.java</file>
-            <file>file:/C:/Users/Rafael/Documents/GitHub/distrib4returns/src/Interface/ComunicacaoServer.java</file>
-            <file>file:/C:/Users/Rafael/Documents/GitHub/distrib4returns/src/Comunicacao/MulticastEnvio.java</file>
-            <file>file:/C:/Users/Rafael/Documents/GitHub/distrib4returns/src/Controle/IOColecionador.java</file>
-            <file>file:/C:/Users/Rafael/Documents/GitHub/distrib4returns/src/Interface/ComunicacaoClient.java</file>
-            <file>file:/C:/Users/Rafael/Documents/GitHub/distrib4returns/src/Comunicacao/MulticastTeste.java</file>
+            <file>file:/C:/Users/Rafael/Documents/GitHub/distrib4returns/src/Comunicacao/RMIClient.java</file>
+            <file>file:/C:/Users/Rafael/Documents/GitHub/distrib4returns/src/GUI/JanelaDadosTroca.java</file>
+            <file>file:/C:/Users/Rafael/Documents/GitHub/distrib4returns/src/GUI/JanelaSolicitacaoTroca.java</file>
+            <file>file:/C:/Users/Rafael/Documents/GitHub/distrib4returns/src/GUI/JanelaCartoes.java</file>
+            <file>file:/C:/Users/Rafael/Documents/GitHub/distrib4returns/src/Modelo/Colecionador.java</file>
         </group>
     </open-files>
 </project-private>
